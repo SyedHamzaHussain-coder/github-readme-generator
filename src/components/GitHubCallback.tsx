@@ -33,42 +33,25 @@ export const GitHubCallback: React.FC = () => {
           throw new Error('No authorization code received from GitHub');
         }
 
-        // Exchange code for access token
-        // Note: In a real app, this should be done on your backend server
-        const tokenResponse = await fetch('/api/auth/github/callback', {
+        // Exchange code for access token using our secure API
+        const tokenResponse = await fetch('/api/auth/github-callback', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ code }),
+          body: JSON.stringify({ code, state }),
         });
 
         if (!tokenResponse.ok) {
-          // For demo purposes, simulate successful authentication
-          console.warn('GitHub OAuth backend not implemented. Using mock data.');
-          await simulateSuccessfulAuth();
-          return;
+          const errorData = await tokenResponse.json();
+          throw new Error(errorData.error || 'Authentication failed');
         }
 
-        const { access_token } = await tokenResponse.json();
+        const data = await tokenResponse.json();
 
-        // Fetch user data from GitHub API
-        const userResponse = await fetch('https://api.github.com/user', {
-          headers: {
-            'Authorization': `Bearer ${access_token}`,
-            'Accept': 'application/vnd.github.v3+json',
-          },
-        });
-
-        if (!userResponse.ok) {
-          throw new Error('Failed to fetch user data from GitHub');
-        }
-
-        const userData = await userResponse.json();
-
-        // Store user data and token
-        localStorage.setItem('github_user', JSON.stringify(userData));
-        localStorage.setItem('github_token', access_token);
+        // Store user data and session token
+        localStorage.setItem('github_user', JSON.stringify(data.user));
+        localStorage.setItem('session_token', data.sessionToken);
 
         setStatus('success');
 
@@ -81,6 +64,13 @@ export const GitHubCallback: React.FC = () => {
         console.error('GitHub OAuth error:', err);
         setError(err instanceof Error ? err.message : 'Unknown error occurred');
         setStatus('error');
+
+        // For development/demo, fall back to mock data if API fails
+        if (window.location.hostname === 'localhost') {
+          console.warn('Falling back to mock authentication for development');
+          await simulateSuccessfulAuth();
+          return;
+        }
 
         // Redirect back to connect page after error display
         setTimeout(() => {
