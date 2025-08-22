@@ -1,5 +1,14 @@
 {
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "rewrites": [
+    {
+      "source": "/api/auth/(.*)",
+      "destination": "/api/auth/$1"
+    },
     {
       "source": "/api/(.*)",
       "destination": "/api/$1"
