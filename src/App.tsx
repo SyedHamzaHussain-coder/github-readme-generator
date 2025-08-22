@@ -31,35 +31,8 @@ const App = () => {
         const userData = JSON.parse(savedUserInfo);
         setGithubData(userData);
         
-        // Simulate loading repos (in real app, fetch from GitHub API)
-        const mockRepos: Repository[] = [
-          {
-            name: 'example-repo',
-            description: 'An example repository',
-            stars: 10,
-            forks: 5,
-            language: 'TypeScript',
-            updated_at: '2024-01-01'
-          },
-          {
-            name: 'portfolio-website',
-            description: 'My personal portfolio website',
-            stars: 25,
-            forks: 8,
-            language: 'React',
-            updated_at: '2024-01-15'
-          },
-          {
-            name: 'awesome-project',
-            description: 'An awesome open source project',
-            stars: 150,
-            forks: 30,
-            language: 'JavaScript',
-            updated_at: '2024-02-01'
-          }
-        ];
-
-        setRepos(mockRepos);
+        // Fetch repositories using our secure API
+        await fetchUserRepositories();
         navigate('/type');
         return;
       }
@@ -73,6 +46,52 @@ const App = () => {
       alert('Failed to connect to GitHub. Please try again.');
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const fetchUserRepositories = async (): Promise<void> => {
+    try {
+      const response = await fetch('/api/github-repos', {
+        method: 'GET',
+        credentials: 'include', // Include session cookies
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch repositories');
+      }
+
+      const data = await response.json();
+      setRepos(data.repositories);
+    } catch (error) {
+      console.error('Failed to fetch repositories:', error);
+      // Fallback to mock data for development
+      const mockRepos: Repository[] = [
+        {
+          name: 'example-repo',
+          description: 'An example repository',
+          stars: 10,
+          forks: 5,
+          language: 'TypeScript',
+          updated_at: '2024-01-01'
+        },
+        {
+          name: 'portfolio-website',
+          description: 'My personal portfolio website',
+          stars: 25,
+          forks: 8,
+          language: 'React',
+          updated_at: '2024-01-15'
+        },
+        {
+          name: 'awesome-project',
+          description: 'An awesome open source project',
+          stars: 150,
+          forks: 30,
+          language: 'JavaScript',
+          updated_at: '2024-02-01'
+        }
+      ];
+      setRepos(mockRepos);
     }
   };
 
@@ -128,18 +147,45 @@ const App = () => {
             repos={repos}
             selectedRepo={selectedRepo}
             setSelectedRepo={setSelectedRepo}
-            onGenerate={() => {
+            onGenerate={async () => {
               setIsGenerating(true);
               navigate('/generate');
-              // Simulate generation delay
-              setTimeout(() => {
+              
+              try {
+                // Use our secure API endpoint for README generation
+                const response = await fetch('/api/generate-readme', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  credentials: 'include',
+                  body: JSON.stringify({
+                    type: readmeType,
+                    template: selectedTemplate,
+                    repository: readmeType === 'repository' ? selectedRepo : undefined,
+                  }),
+                });
+
+                if (!response.ok) {
+                  throw new Error('Failed to generate README');
+                }
+
+                const data = await response.json();
+                setGeneratedReadme(data.readme);
+                setEditedReadme(data.readme);
+                navigate('/preview');
+              } catch (error) {
+                console.error('Failed to generate README:', error);
+                // Fallback to template preview
                 const template = (readmeType === 'repository' ? repositoryTemplates : profileTemplates)
                   .find(t => t.id === selectedTemplate);
                 setGeneratedReadme(template?.preview || '');
                 setEditedReadme(template?.preview || '');
-                setIsGenerating(false);
                 navigate('/preview');
-              }, 2000);
+                alert('Using template preview. AI generation failed.');
+              } finally {
+                setIsGenerating(false);
+              }
             }}
           />
         );

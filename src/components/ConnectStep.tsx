@@ -12,14 +12,73 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
   const [isConnected, setIsConnected] = useState(false);
   const [userInfo, setUserInfo] = useState<GitHubData | null>(null);
 
-  // Check if user is already connected (from localStorage or session)
+  // Check if user is already connected and handle OAuth callback
   useEffect(() => {
+    // Handle OAuth callback
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const state = urlParams.get('state');
+    const error = urlParams.get('error');
+
+    if (error) {
+      console.error('OAuth error:', error);
+      alert('GitHub authentication failed. Please try again.');
+      return;
+    }
+
+    if (code && state) {
+      // Verify state parameter
+      const savedState = localStorage.getItem('github_oauth_state');
+      if (state !== savedState) {
+        console.error('OAuth state mismatch');
+        alert('Security error during authentication. Please try again.');
+        return;
+      }
+
+      // Exchange code for token using our secure API
+      handleOAuthCallback(code);
+      return;
+    }
+
+    // Check if user is already connected (from localStorage or session)
     const savedUserInfo = localStorage.getItem('github_user');
     if (savedUserInfo) {
       setUserInfo(JSON.parse(savedUserInfo));
       setIsConnected(true);
     }
   }, []);
+
+  const handleOAuthCallback = async (code: string) => {
+    try {
+      const response = await fetch('/api/auth/github-callback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+        credentials: 'include', // Include cookies for session
+      });
+
+      if (!response.ok) {
+        throw new Error('Authentication failed');
+      }
+
+      const data = await response.json();
+      
+      // Store user info locally for quick access
+      localStorage.setItem('github_user', JSON.stringify(data.user));
+      localStorage.removeItem('github_oauth_state'); // Clean up
+      
+      setUserInfo(data.user);
+      setIsConnected(true);
+
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } catch (error) {
+      console.error('OAuth callback error:', error);
+      alert('Authentication failed. Please try again.');
+    }
+  };
 
   const handleGitHubLogin = () => {
     // Log current configuration for debugging
@@ -40,9 +99,21 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     window.location.href = githubAuthUrl;
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    // Clear local storage
     localStorage.removeItem('github_user');
     localStorage.removeItem('github_token');
+    
+    // Clear server-side session
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    
     setUserInfo(null);
     setIsConnected(false);
   };
