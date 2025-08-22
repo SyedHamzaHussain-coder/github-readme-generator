@@ -22,14 +22,14 @@ const getConfig = (): AppConfig => {
   }
 
   // Get base URL from environment variable or construct from current location
-  const envBaseUrl = (window as any).REACT_APP_BASE_URL;
+  const envBaseUrl = import.meta.env.VITE_APP_BASE_URL || import.meta.env.REACT_APP_BASE_URL;
   const baseUrl = envBaseUrl || `${protocol}//${window.location.host}`;
 
   // Get GitHub client ID (should be different for each environment)
-  const githubClientId = (window as any).REACT_APP_GITHUB_CLIENT_ID || 'your_github_client_id';
+  const githubClientId = import.meta.env.VITE_APP_GITHUB_CLIENT_ID || import.meta.env.REACT_APP_GITHUB_CLIENT_ID || 'your_github_client_id';
 
   // API URL for backend calls (adjust as needed)
-  const apiUrl = (window as any).REACT_APP_API_URL || `${baseUrl}/api`;
+  const apiUrl = import.meta.env.VITE_APP_API_URL || import.meta.env.REACT_APP_API_URL || `${baseUrl}/api`;
 
   return {
     baseUrl,
