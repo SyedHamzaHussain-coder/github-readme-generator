@@ -3,6 +3,7 @@ import App from './App';
 import LandingPage from './components/LandingPage';
 import ExamplesPage from './components/ExamplesPage';
 import { GitHubCallback } from './components/GitHubCallback';
+import { DebugPage } from './components/DebugPage';
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
       {
         path: "/examples",
         element: <ExamplesPage />,
+      },
+      {
+        path: "/debug",
+        element: <DebugPage />,
       },
       {
         path: "/connect",

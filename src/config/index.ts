@@ -23,10 +23,21 @@ const getConfig = (): AppConfig => {
 
   // Get base URL from environment variable or construct from current location
   const envBaseUrl = import.meta.env.VITE_APP_BASE_URL || import.meta.env.REACT_APP_BASE_URL;
-  const baseUrl = envBaseUrl || `${protocol}//${window.location.host}`;
+  let baseUrl = envBaseUrl || `${protocol}//${window.location.host}`;
+  
+  // For Vercel production, always use the current URL
+  if (environment === 'production' && hostname.includes('vercel.app')) {
+    baseUrl = `${protocol}//${window.location.host}`;
+  }
 
   // Get GitHub client ID (should be different for each environment)
-  const githubClientId = import.meta.env.VITE_APP_GITHUB_CLIENT_ID || import.meta.env.REACT_APP_GITHUB_CLIENT_ID || 'your_github_client_id';
+  let githubClientId = import.meta.env.VITE_APP_GITHUB_CLIENT_ID || import.meta.env.REACT_APP_GITHUB_CLIENT_ID || 'your_github_client_id';
+  
+  // For production, use the same client ID but make sure it's set
+  if (environment === 'production') {
+    // Use environment variable or fallback to the one we know
+    githubClientId = import.meta.env.REACT_APP_GITHUB_CLIENT_ID || 'Ov23li3OjcXsV4D0EyK4';
+  }
 
   // API URL for backend calls (adjust as needed)
   const apiUrl = import.meta.env.VITE_APP_API_URL || import.meta.env.REACT_APP_API_URL || `${baseUrl}/api`;
