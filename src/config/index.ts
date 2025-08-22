@@ -31,13 +31,16 @@ const getConfig = (): AppConfig => {
   }
 
   // Get GitHub client ID (should be different for each environment)
-  let githubClientId = import.meta.env.VITE_APP_GITHUB_CLIENT_ID || import.meta.env.REACT_APP_GITHUB_CLIENT_ID || 'your_github_client_id';
+  let githubClientId = import.meta.env.VITE_APP_GITHUB_CLIENT_ID || import.meta.env.REACT_APP_GITHUB_CLIENT_ID;
   
-  // For production, use the same client ID but make sure it's set
-  if (environment === 'production') {
-    // Use environment variable or fallback to the one we know
-    githubClientId = import.meta.env.REACT_APP_GITHUB_CLIENT_ID || 'Ov23li3OjcXsV4D0EyK4';
+  // Fallback to hardcoded value if environment variable is not set (especially for production)
+  if (!githubClientId || githubClientId === 'your_github_client_id') {
+    // Use the actual client ID as fallback
+    githubClientId = 'Ov23li3OjcXsV4D0EyK4';
+    console.warn('GitHub Client ID not found in environment variables, using fallback');
   }
+  
+  console.log('GitHub Client ID being used:', githubClientId);
 
   // API URL for backend calls (adjust as needed)
   const apiUrl = import.meta.env.VITE_APP_API_URL || import.meta.env.REACT_APP_API_URL || `${baseUrl}/api`;

@@ -76,6 +76,16 @@ export const DebugPage: React.FC = () => {
           </pre>
         </div>
         
+        <div className="bg-red-900 p-4 rounded">
+          <h2 className="text-lg font-semibold mb-2">🔍 Environment Variables Debug</h2>
+          <pre className="text-sm text-red-200">
+            REACT_APP_GITHUB_CLIENT_ID: {import.meta.env.REACT_APP_GITHUB_CLIENT_ID || 'NOT SET'}{'\n'}
+            VITE_APP_GITHUB_CLIENT_ID: {import.meta.env.VITE_APP_GITHUB_CLIENT_ID || 'NOT SET'}{'\n'}
+            REACT_APP_BASE_URL: {import.meta.env.REACT_APP_BASE_URL || 'NOT SET'}{'\n'}
+            All env vars: {JSON.stringify(import.meta.env, null, 2)}
+          </pre>
+        </div>
+        
         <div className="space-x-4">
           <button
             onClick={handleDebugOAuth}
