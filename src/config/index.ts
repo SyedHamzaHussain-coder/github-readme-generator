@@ -21,18 +21,12 @@ const getConfig = (): AppConfig => {
     environment = 'production';
   }
 
-  // Get base URL from environment variable or construct from current location
-  const envBaseUrl = import.meta.env.VITE_APP_BASE_URL || import.meta.env.REACT_APP_BASE_URL;
-  let baseUrl = envBaseUrl || `${protocol}//${window.location.host}`;
+  // Always use current window location for base URL (this ensures correct domain)
+  let baseUrl = `${protocol}//${window.location.host}`;
   
   // Remove trailing slash if present
   if (baseUrl.endsWith('/')) {
     baseUrl = baseUrl.slice(0, -1);
-  }
-  
-  // For Vercel production, always use the current URL
-  if (environment === 'production' && hostname.includes('vercel.app')) {
-    baseUrl = `${protocol}//${window.location.host}`;
   }
 
   // Get GitHub client ID (should be different for each environment)
