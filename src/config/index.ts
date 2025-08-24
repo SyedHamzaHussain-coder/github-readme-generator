@@ -25,6 +25,11 @@ const getConfig = (): AppConfig => {
   const envBaseUrl = import.meta.env.VITE_APP_BASE_URL || import.meta.env.REACT_APP_BASE_URL;
   let baseUrl = envBaseUrl || `${protocol}//${window.location.host}`;
   
+  // Remove trailing slash if present
+  if (baseUrl.endsWith('/')) {
+    baseUrl = baseUrl.slice(0, -1);
+  }
+  
   // For Vercel production, always use the current URL
   if (environment === 'production' && hostname.includes('vercel.app')) {
     baseUrl = `${protocol}//${window.location.host}`;
