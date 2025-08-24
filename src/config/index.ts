@@ -36,10 +36,14 @@ const getConfig = (): AppConfig => {
   if (!githubClientId || githubClientId === 'your_github_client_id') {
     // Use the actual client ID as fallback
     githubClientId = 'Ov23li3OjcXsV4D0EyK4';
-    console.warn('GitHub Client ID not found in environment variables, using fallback');
+    if (environment === 'development') {
+      console.warn('GitHub Client ID not found in environment variables, using fallback');
+    }
   }
   
-  console.log('GitHub Client ID being used:', githubClientId);
+  if (environment === 'development') {
+    console.log('GitHub Client ID being used:', githubClientId);
+  }
 
   // API URL for backend calls (adjust as needed)
   const apiUrl = import.meta.env.VITE_APP_API_URL || import.meta.env.REACT_APP_API_URL || `${baseUrl}/api`;
