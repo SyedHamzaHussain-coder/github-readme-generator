@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import LandingPage from './components/LandingPage';
 import ExamplesPage from './components/ExamplesPage';
-import { GitHubCallback } from './components/GitHubCallback';
+import GitHubCallback from './components/GitHubCallback';
 import { DebugPage } from './components/DebugPage';
 
 export const router = createBrowserRouter([

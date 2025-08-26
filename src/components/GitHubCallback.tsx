@@ -1,241 +1,183 @@
+// GitHubCallback.jsx or your callback component
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Github, CheckCircle, AlertCircle } from 'lucide-react';
 
-export const GitHubCallback: React.FC = () => {
-  // IMMEDIATE DEBUG - This should be the FIRST thing in console
-  console.log('🚨 IMMEDIATE: GitHubCallback component function called');
-  
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
-  const [error, setError] = useState<string>('');
-
-  // Add debug logging for component render
-  console.log('🎯 GitHubCallback component rendered, status:', status);
-  console.log('🔗 Current URL:', window.location.href);
-  console.log('📋 Search params:', Array.from(searchParams.entries()));
+const GitHubCallback = () => {
+  const [status, setStatus] = useState('loading');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const handleCallback = async () => {
+    const handleGitHubCallback = async () => {
       try {
         console.log('🔄 Starting OAuth callback processing...');
-        const code = searchParams.get('code');
-        const state = searchParams.get('state');
-        const error = searchParams.get('error');
-
-        console.log('📋 OAuth parameters:', { code: code?.substring(0, 10) + '...', state, error });
-
-        // Check for OAuth error
-        if (error) {
-          throw new Error(`GitHub OAuth error: ${error}`);
-        }
-
-        // Verify state parameter (but don't fail if not found - for demo purposes)
-        const savedState = localStorage.getItem('github_oauth_state');
-        console.log('🔐 State verification:', { received: state, saved: savedState });
+        setStatus('loading');
         
-        if (!state) {
-          console.warn('⚠️ No state parameter received');
-        } else if (savedState && state !== savedState) {
-          console.warn('⚠️ State mismatch - proceeding anyway for demo');
-          // For production, you'd want to throw an error here:
-          // throw new Error('Invalid state parameter. Possible CSRF attack.');
-        }
-
-        // Remove state from localStorage
-        localStorage.removeItem('github_oauth_state');
-
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        
+        console.log('📋 OAuth parameters:', { 
+          code: code ? `${code.substring(0, 8)}...` : null, 
+          state: state ? `${state.substring(0, 8)}...` : null 
+        });
+        
         if (!code) {
           throw new Error('No authorization code received from GitHub');
         }
-
+        
+        if (!state) {
+          console.warn('⚠️ No state parameter - this may be a security risk');
+        }
+        
         console.log('🚀 Exchanging code for token...');
-        // Exchange code for access token using our secure API
-        const tokenResponse = await fetch('/api/auth/github-callback', {
-          method: 'POST',
+        
+        // Make GET request with parameters in URL
+        const apiUrl = `/api/auth/github-callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state || '')}`;
+        console.log('🌐 API URL:', apiUrl.replace(code, `${code.substring(0, 8)}...`));
+        
+        const response = await fetch(apiUrl, {
+          method: 'GET',
           headers: {
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ code, state }),
         });
-
-        console.log('📡 Token response status:', tokenResponse.status);
-
-        if (!tokenResponse.ok) {
-          let errorData;
-          const responseText = await tokenResponse.text();
-          console.error('❌ Raw API response:', responseText);
-          
-          try {
-            errorData = JSON.parse(responseText);
-          } catch (parseError) {
-            console.error('❌ Failed to parse error response as JSON:', parseError);
-            throw new Error(`API Error (${tokenResponse.status}): ${responseText.substring(0, 200)}...`);
-          }
-          
-          console.error('❌ Token exchange failed:', errorData);
-          throw new Error(errorData.error || 'Authentication failed');
+        
+        console.log('📡 Token response status:', response.status);
+        console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
+        
+        let responseData;
+        const contentType = response.headers.get('content-type');
+        
+        if (contentType && contentType.includes('application/json')) {
+          responseData = await response.json();
+        } else {
+          // Handle non-JSON responses
+          const textResponse = await response.text();
+          console.log('📄 Non-JSON response:', textResponse);
+          responseData = { error: textResponse };
         }
-
-        const responseText = await tokenResponse.text();
-        let data;
-        try {
-          data = JSON.parse(responseText);
-        } catch (parseError) {
-          console.error('❌ Failed to parse success response as JSON:', parseError);
-          console.error('❌ Raw success response:', responseText);
-          throw new Error(`Invalid JSON response from server: ${responseText.substring(0, 200)}...`);
+        
+        console.log('📋 API Response:', {
+          ok: response.ok,
+          status: response.status,
+          hasAccessToken: !!responseData.access_token,
+          hasUser: !!responseData.user,
+          error: responseData.error
+        });
+        
+        if (!response.ok) {
+          console.error('❌ API Error Response:', responseData);
+          throw new Error(responseData.error || responseData.details || `HTTP ${response.status}`);
         }
-        console.log('✅ Authentication successful for user:', data.user?.login);
-
-        // Store user data and session token
-        localStorage.setItem('github_user', JSON.stringify(data.user));
-        localStorage.setItem('session_token', data.sessionToken);
-
+        
+        if (!responseData.access_token) {
+          console.error('❌ No access token in response');
+          throw new Error('No access token received from GitHub');
+        }
+        
+        if (!responseData.user) {
+          console.error('❌ No user data in response');
+          throw new Error('No user information received from GitHub');
+        }
+        
+        console.log('✅ OAuth success! User:', responseData.user.login);
+        
+        // Store the authentication data
+        localStorage.setItem('github_token', responseData.access_token);
+        localStorage.setItem('github_user', JSON.stringify(responseData.user));
+        
+        // Optional: Store additional metadata
+        localStorage.setItem('github_auth_timestamp', Date.now().toString());
+        localStorage.setItem('github_auth_success', 'true');
+        
         setStatus('success');
-
-        // Redirect to the next step after a brief delay
+        
+        // Wait a moment to show success, then redirect
         setTimeout(() => {
-          navigate('/type');
-        }, 2000);
-
-      } catch (err) {
-        console.error('❌ GitHub OAuth error:', err);
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-        console.error('🔍 Error details:', errorMessage);
-        setError(errorMessage);
+          console.log('🔄 Redirecting to main app...');
+          window.location.href = '/';
+        }, 1000);
+        
+      } catch (error) {
+        console.error('❌ GitHub OAuth error:', error);
+        console.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack trace available');
+        
         setStatus('error');
-
-        // For development/demo, fall back to mock data if API fails
-        if (window.location.hostname === 'localhost' || errorMessage.includes('Failed to fetch')) {
-          console.warn('⚠️ Falling back to mock authentication due to API error');
-          await simulateSuccessfulAuth();
-          return;
-        }
-
-        // Redirect back to connect page after error display
-        setTimeout(() => {
-          navigate('/connect');
-        }, 3000);
+        setError(error instanceof Error ? error.message : 'An unknown error occurred');
+        
+        // Optional: Clear any existing auth data on error
+        localStorage.removeItem('github_token');
+        localStorage.removeItem('github_user');
+        localStorage.removeItem('github_auth_timestamp');
+        localStorage.setItem('github_auth_success', 'false');
       }
     };
 
-    // Simulate successful authentication for demo purposes
-    const simulateSuccessfulAuth = async () => {
-      const mockUserData = {
-        id: 12345,
-        login: 'demo-user',
-        name: 'Demo User',
-        email: 'demo@example.com',
-        avatar_url: 'https://github.com/github.png',
-        bio: 'This is a demo account for README Generator',
-        blog: 'https://example.com',
-        company: 'Demo Company',
-        location: 'Demo City',
-        public_repos: 15,
-        followers: 100,
-        following: 50,
-        created_at: '2020-01-01T00:00:00Z',
-        twitter_username: 'demouser'
-      };
+    // Start the callback process
+    handleGitHubCallback();
+  }, []);
 
-      localStorage.setItem('github_user', JSON.stringify(mockUserData));
-      localStorage.setItem('github_token', 'demo_token_12345');
-
-      setStatus('success');
-
-      setTimeout(() => {
-        navigate('/type');
-      }, 2000);
-    };
-
-    handleCallback();
-  }, [searchParams, navigate]);
-
-  console.log('🏁 About to render GitHubCallback component');
-
-  try {
+  // Render different states
+  if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
-        {/* Simple fallback for debugging */}
-        <div style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: 'red', color: 'white', padding: '10px' }}>
-          GitHubCallback Component Loaded - Status: {status}
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-900">Connecting to GitHub...</h2>
+          <p className="text-gray-600 mt-2">Please wait while we complete the authentication process.</p>
         </div>
-      
-      <div className="max-w-md w-full">
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-          <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-100 text-center">
-            {status === 'loading' && (
-              <>
-                {/* Simple HTML fallback */}
-                <div style={{ background: 'yellow', padding: '20px', margin: '20px 0' }}>
-                  <h1>LOADING: Processing GitHub OAuth...</h1>
-                  <p>If you see this, the component is working but styled elements might not be loading.</p>
-                </div>
-                
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-600 border-t-transparent mx-auto mb-6"></div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Connecting to GitHub</h2>
-                <p className="text-gray-600">
-                  Please wait while we authenticate your GitHub account...
-                </p>
-              </>
-            )}
+      </div>
+    );
+  }
 
-            {status === 'success' && (
-              <>
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
-                </div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Successfully Connected!</h2>
-                <p className="text-gray-600 mb-4">
-                  Your GitHub account has been connected. Redirecting you to the next step...
-                </p>
-                <div className="flex items-center justify-center text-green-600">
-                  <Github className="w-5 h-5 mr-2" />
-                  <span className="font-medium">GitHub Connected</span>
-                </div>
-              </>
-            )}
+  if (status === 'success') {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          <div className="w-12 h-12 mx-auto mb-4 text-green-600">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900">Successfully connected!</h2>
+          <p className="text-gray-600 mt-2">Redirecting to your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
-            {status === 'error' && (
-              <>
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <AlertCircle className="w-8 h-8 text-red-600" />
-                </div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Connection Failed</h2>
-                <p className="text-gray-600 mb-4">
-                  {error || 'Failed to connect to GitHub. Please try again.'}
-                </p>
-                <p className="text-sm text-gray-500">
-                  Redirecting you back to the connection page...
-                </p>
-              </>
-            )}
-
-            {/* Debug information - always show for now to help troubleshoot */}
-            <div className="mt-6 p-4 bg-gray-100 rounded-lg text-xs">
-              <p><strong>Debug Info:</strong></p>
-              <p>Status: {status}</p>
-              <p>Code: {searchParams.get('code')?.substring(0, 10)}...</p>
-              <p>State: {searchParams.get('state')}</p>
-              <p>Error: {error}</p>
-              <p>URL: {window.location.href}</p>
-            </div>
+  if (status === 'error') {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center max-w-md">
+          <div className="w-12 h-12 mx-auto mb-4 text-red-600">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900">Authentication Failed</h2>
+          <p className="text-gray-600 mt-2 mb-4">{error}</p>
+          <div className="space-y-2">
+            <button 
+              onClick={() => window.location.href = '/'}
+              className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            >
+              Return to Home
+            </button>
+            <button 
+              onClick={() => window.location.reload()}
+              className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors"
+            >
+              Try Again
+            </button>
           </div>
         </div>
       </div>
-    </div>
-  ) as JSX.Element;
-  } catch (renderError: any) {
-    console.error('🚨 GitHubCallback render error:', renderError);
-    return (
-      <div style={{ background: 'red', color: 'white', padding: '20px', fontSize: '16px' }}>
-        <h1>RENDER ERROR in GitHubCallback</h1>
-        <p>Error: {String(renderError)}</p>
-        <p>Check console for details</p>
-      </div>
-    ) as JSX.Element;
+    );
   }
+
+  return null;
 };
+
+export default GitHubCallback;
