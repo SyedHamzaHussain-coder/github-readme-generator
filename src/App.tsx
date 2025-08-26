@@ -11,6 +11,7 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const step = location.pathname === '/' ? 'landing' : location.pathname.slice(1) as StepType;
+  const currentPath = location.pathname;
   const [readmeType, setReadmeType] = useState<ReadmeType>('repository');
   const [githubData, setGithubData] = useState<GitHubData | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState('comprehensive');
@@ -290,8 +291,8 @@ const App = () => {
       )}
 
       {/* Main Content */}
-      <main className={step === 'landing' || step === 'examples' ? '' : 'max-w-7xl mx-auto px-4 py-8'}>
-        {step === 'landing' || step === 'examples' ? <Outlet /> : renderStepContent()}
+      <main className={step === 'landing' || step === 'examples' || currentPath === '/auth/callback' || currentPath === '/debug' ? '' : 'max-w-7xl mx-auto px-4 py-8'}>
+        {step === 'landing' || step === 'examples' || currentPath === '/auth/callback' || currentPath === '/debug' ? <Outlet /> : renderStepContent()}
       </main>
     </div>
   );
