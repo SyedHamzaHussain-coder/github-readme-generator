@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sparkles, Wand2, Edit3 } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ConnectStep } from './components/ConnectStep';
@@ -22,6 +22,45 @@ const App = () => {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [selectedRepo, setSelectedRepo] = useState('');
 
+  // Load GitHub data on component mount if user is already authenticated
+  useEffect(() => {
+    const loadStoredGitHubData = () => {
+      const savedUserInfo = localStorage.getItem('github_user');
+      const githubToken = localStorage.getItem('github_token');
+      
+      if (savedUserInfo && githubToken && !githubData) {
+        try {
+          const userData = JSON.parse(savedUserInfo);
+          const githubDataFormatted: GitHubData = {
+            avatar_url: userData.avatar_url,
+            name: userData.name || userData.login,
+            username: userData.login,
+            bio: userData.bio || '',
+            public_repos: userData.public_repos || 0,
+            followers: userData.followers || 0,
+            following: userData.following || 0,
+            location: userData.location || '',
+            company: userData.company || '',
+            blog: userData.blog || '',
+            twitter_username: userData.twitter_username || '',
+            email: userData.email || '',
+            created_at: userData.created_at || '',
+          };
+          setGithubData(githubDataFormatted);
+          
+          // Also fetch repositories if we're not already loading them
+          if (repos.length === 0) {
+            fetchUserRepositories();
+          }
+        } catch (error) {
+          console.error('Failed to load stored GitHub data:', error);
+        }
+      }
+    };
+
+    loadStoredGitHubData();
+  }, [githubData, repos.length]);
+
   const connectToGitHub = async (): Promise<void> => {
     try {
       setIsGenerating(true);
@@ -30,7 +69,23 @@ const App = () => {
       const savedUserInfo = localStorage.getItem('github_user');
       if (savedUserInfo) {
         const userData = JSON.parse(savedUserInfo);
-        setGithubData(userData);
+        // Transform the GitHub user data to GitHubData format
+        const githubDataFormatted: GitHubData = {
+          avatar_url: userData.avatar_url,
+          name: userData.name || userData.login,
+          username: userData.login,
+          bio: userData.bio || '',
+          public_repos: userData.public_repos || 0,
+          followers: userData.followers || 0,
+          following: userData.following || 0,
+          location: userData.location || '',
+          company: userData.company || '',
+          blog: userData.blog || '',
+          twitter_username: userData.twitter_username || '',
+          email: userData.email || '',
+          created_at: userData.created_at || '',
+        };
+        setGithubData(githubDataFormatted);
         
         // Fetch repositories using our secure API
         await fetchUserRepositories();
@@ -52,9 +107,24 @@ const App = () => {
 
   const fetchUserRepositories = async (): Promise<void> => {
     try {
+      // Get the stored GitHub token
+      const githubToken = localStorage.getItem('github_token');
+      if (!githubToken) {
+        throw new Error('No GitHub token found');
+      }
+
+      // Create session token in the format expected by the API
+      const sessionData = { githubToken };
+      const sessionToken = btoa(JSON.stringify(sessionData));
+
       const response = await fetch('/api/github-repos', {
-        method: 'GET',
-        credentials: 'include', // Include session cookies
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          sessionToken 
+        }),
       });
 
       if (!response.ok) {
@@ -62,7 +132,18 @@ const App = () => {
       }
 
       const data = await response.json();
-      setRepos(data.repositories);
+      
+      // Transform the repository data to match our Repository interface
+      const formattedRepos = data.repositories.map((repo: any) => ({
+        name: repo.name,
+        description: repo.description || '',
+        stars: repo.stargazers_count || 0,
+        forks: repo.forks_count || 0,
+        language: repo.language || 'Unknown',
+        updated_at: repo.updated_at
+      }));
+      
+      setRepos(formattedRepos);
     } catch (error) {
       console.error('Failed to fetch repositories:', error);
       // Fallback to mock data for development
@@ -138,13 +219,22 @@ const App = () => {
           </div>
         );
       case 'template':
+        if (!githubData) {
+          return (
+            <div className="text-center p-8">
+              <h2 className="text-2xl font-bold mb-4">Loading GitHub Data...</h2>
+              <p className="text-gray-600">Please wait while we load your GitHub profile information.</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-4 border-purple-600 border-t-transparent mx-auto mt-4"></div>
+            </div>
+          );
+        }
         return (
           <TemplateStep
             readmeType={readmeType}
             templates={readmeType === 'repository' ? repositoryTemplates : profileTemplates}
             selectedTemplate={selectedTemplate}
             setSelectedTemplate={setSelectedTemplate}
-            githubData={githubData!}
+            githubData={githubData}
             repos={repos}
             selectedRepo={selectedRepo}
             setSelectedRepo={setSelectedRepo}
