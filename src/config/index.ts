@@ -21,6 +21,9 @@ const getConfig = (): AppConfig => {
     environment = 'production';
   }
 
+  // Debug environment detection (remove after fixing)
+  console.log('🔍 Environment detection:', { hostname, environment });
+
   // Always use current window location for base URL (this ensures correct domain)
   let baseUrl = `${protocol}//${window.location.host}`;
   
@@ -36,12 +39,14 @@ const getConfig = (): AppConfig => {
   if (!githubClientId || githubClientId === 'your_github_client_id') {
     // Use the actual client ID as fallback
     githubClientId = 'Ov23li3OjcXsV4D0EyK4';
-    if (environment === 'development') {
+    // Only show warning in actual development (localhost)
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
       console.warn('GitHub Client ID not found in environment variables, using fallback');
     }
   }
   
-  if (environment === 'development') {
+  // Only show debug info in actual development (localhost)
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
     console.log('GitHub Client ID being used:', githubClientId);
   }
 
