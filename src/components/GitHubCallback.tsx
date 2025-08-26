@@ -10,6 +10,8 @@ export const GitHubCallback: React.FC = () => {
 
   // Add debug logging for component render
   console.log('🎯 GitHubCallback component rendered, status:', status);
+  console.log('🔗 Current URL:', window.location.href);
+  console.log('📋 Search params:', Array.from(searchParams.entries()));
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -132,12 +134,23 @@ export const GitHubCallback: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
+      {/* Simple fallback for debugging */}
+      <div style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: 'red', color: 'white', padding: '10px' }}>
+        GitHubCallback Component Loaded - Status: {status}
+      </div>
+      
       <div className="max-w-md w-full">
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
           <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-100 text-center">
             {status === 'loading' && (
               <>
+                {/* Simple HTML fallback */}
+                <div style={{ background: 'yellow', padding: '20px', margin: '20px 0' }}>
+                  <h1>LOADING: Processing GitHub OAuth...</h1>
+                  <p>If you see this, the component is working but styled elements might not be loading.</p>
+                </div>
+                
                 <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-600 border-t-transparent mx-auto mb-6"></div>
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">Connecting to GitHub</h2>
                 <p className="text-gray-600">
