@@ -3,6 +3,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Github, CheckCircle, AlertCircle } from 'lucide-react';
 
 export const GitHubCallback: React.FC = () => {
+  // IMMEDIATE DEBUG - This should be the FIRST thing in console
+  console.log('🚨 IMMEDIATE: GitHubCallback component function called');
+  
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
@@ -132,12 +135,15 @@ export const GitHubCallback: React.FC = () => {
     handleCallback();
   }, [searchParams, navigate]);
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
-      {/* Simple fallback for debugging */}
-      <div style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: 'red', color: 'white', padding: '10px' }}>
-        GitHubCallback Component Loaded - Status: {status}
-      </div>
+  console.log('🏁 About to render GitHubCallback component');
+
+  try {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
+        {/* Simple fallback for debugging */}
+        <div style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: 'red', color: 'white', padding: '10px' }}>
+          GitHubCallback Component Loaded - Status: {status}
+        </div>
       
       <div className="max-w-md w-full">
         <div className="relative">
@@ -203,5 +209,15 @@ export const GitHubCallback: React.FC = () => {
         </div>
       </div>
     </div>
-  );
+  ) as JSX.Element;
+  } catch (renderError: any) {
+    console.error('🚨 GitHubCallback render error:', renderError);
+    return (
+      <div style={{ background: 'red', color: 'white', padding: '20px', fontSize: '16px' }}>
+        <h1>RENDER ERROR in GitHubCallback</h1>
+        <p>Error: {String(renderError)}</p>
+        <p>Check console for details</p>
+      </div>
+    ) as JSX.Element;
+  }
 };

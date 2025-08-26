@@ -22,7 +22,13 @@ const getConfig = (): AppConfig => {
   }
 
   // Debug environment detection (remove after fixing)
-  console.log('🔍 Environment detection:', { hostname, environment });
+  console.log('🔍 Environment detection:', { 
+    hostname, 
+    environment, 
+    protocol,
+    fullUrl: `${protocol}//${window.location.host}${window.location.pathname}`,
+    searchParams: window.location.search
+  });
 
   // Always use current window location for base URL (this ensures correct domain)
   let baseUrl = `${protocol}//${window.location.host}`;
