@@ -1,18 +1,24 @@
 module.exports = async function handler(req, res) {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', process.env.REACT_APP_BASE_URL || 'https://github-readme-generator-delta.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
   try {
+    // Set proper headers first
+    res.setHeader('Access-Control-Allow-Origin', process.env.REACT_APP_BASE_URL || 'https://github-readme-generator-delta.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Content-Type', 'application/json');
+
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
+
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    // Basic request validation
+    if (!req.body) {
+      return res.status(400).json({ error: 'Request body is required' });
+    }
+
     const { code, state } = req.body;
 
     if (!code) {
@@ -78,7 +84,7 @@ module.exports = async function handler(req, res) {
     console.log('Successfully fetched user data for:', userData.login);
 
     // Create session token (simple approach - in production use JWT)
-    const sessionToken = Buffer.from(`${userData.id}-${Date.now()}-${Math.random()}`).toString('base64');
+    const sessionToken = `${userData.id}-${Date.now()}-${Math.random()}`.replace(/\./g, '');
 
     // Store the GitHub access token securely (in production, use a database)
     // For now, we'll include it in the session token (encoded)
@@ -88,9 +94,10 @@ module.exports = async function handler(req, res) {
       createdAt: Date.now(),
     };
     
+    // Use btoa instead of Buffer for better compatibility
     const encodedSession = Buffer.from(JSON.stringify(sessionData)).toString('base64');
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       user: {
         id: userData.id,
@@ -111,7 +118,14 @@ module.exports = async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error('GitHub OAuth Error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('GitHub OAuth Error Details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      details: error.message 
+    });
   }
 }
