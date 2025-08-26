@@ -20,6 +20,23 @@ module.exports = async function handler(req, res) {
     }
 
     console.log('Processing GitHub OAuth callback...');
+    console.log('Environment variables check:', {
+      hasClientId: !!process.env.GITHUB_CLIENT_ID,
+      hasClientSecret: !!process.env.GITHUB_CLIENT_SECRET,
+      clientIdPrefix: process.env.GITHUB_CLIENT_ID?.substring(0, 10)
+    });
+
+    // Check for required environment variables
+    if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+      console.error('Missing required environment variables');
+      return res.status(500).json({ 
+        error: 'Server configuration error: Missing GitHub OAuth credentials',
+        details: {
+          hasClientId: !!process.env.GITHUB_CLIENT_ID,
+          hasClientSecret: !!process.env.GITHUB_CLIENT_SECRET
+        }
+      });
+    }
 
     // Exchange code for access token
     const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {

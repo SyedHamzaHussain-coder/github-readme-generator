@@ -63,12 +63,30 @@ export const GitHubCallback: React.FC = () => {
         console.log('📡 Token response status:', tokenResponse.status);
 
         if (!tokenResponse.ok) {
-          const errorData = await tokenResponse.json();
+          let errorData;
+          const responseText = await tokenResponse.text();
+          console.error('❌ Raw API response:', responseText);
+          
+          try {
+            errorData = JSON.parse(responseText);
+          } catch (parseError) {
+            console.error('❌ Failed to parse error response as JSON:', parseError);
+            throw new Error(`API Error (${tokenResponse.status}): ${responseText.substring(0, 200)}...`);
+          }
+          
           console.error('❌ Token exchange failed:', errorData);
           throw new Error(errorData.error || 'Authentication failed');
         }
 
-        const data = await tokenResponse.json();
+        const responseText = await tokenResponse.text();
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error('❌ Failed to parse success response as JSON:', parseError);
+          console.error('❌ Raw success response:', responseText);
+          throw new Error(`Invalid JSON response from server: ${responseText.substring(0, 200)}...`);
+        }
         console.log('✅ Authentication successful for user:', data.user?.login);
 
         // Store user data and session token
