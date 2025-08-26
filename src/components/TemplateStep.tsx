@@ -1,6 +1,8 @@
-import React from 'react';
-import { Wand2, GitBranch, Calendar, Code2, Star, Users } from 'lucide-react';
+import React, { useState } from 'react';
+import { Wand2, GitBranch, Calendar, Code2, Star, Users, List, Grid } from 'lucide-react';
 import { Repository, GitHubData, Template } from '../types';
+import GitHubRepositoryList from './GitHubRepositoryList';
+import GitHubProfile from './GitHubProfile';
 
 interface TemplateStepProps {
   readmeType: 'repository' | 'profile';
@@ -25,6 +27,11 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
   setSelectedRepo,
   onGenerate,
 }) => {
+  const [useEnhancedRepoView, setUseEnhancedRepoView] = useState(false);
+
+  const handleRepositorySelect = (repository: any) => {
+    setSelectedRepo(repository.name);
+  };
   return (
     <div className="max-w-6xl mx-auto">
       <div className="text-center mb-12">
@@ -35,65 +42,97 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
       </div>
 
       {/* User Profile Card */}
-      <div className="bg-white rounded-2xl shadow-xl p-6 mb-8 border border-gray-100">
-        <div className="flex items-center space-x-4">
-          <img src={githubData.avatar_url} alt="Avatar" className="w-16 h-16 rounded-full" />
-          <div className="flex-1">
-            <h3 className="text-xl font-bold text-gray-800">{githubData.name}</h3>
-            <p className="text-gray-600">@{githubData.username}</p>
-            <p className="text-gray-500 text-sm">{githubData.bio}</p>
-          </div>
-          <div className="text-right text-sm text-gray-500">
-            <div className="flex items-center space-x-4">
-              <span className="flex items-center"><Users className="w-4 h-4 mr-1" />{githubData.followers}</span>
-              <span className="flex items-center"><Star className="w-4 h-4 mr-1" />{githubData.public_repos}</span>
-            </div>
-          </div>
-        </div>
+      <div className="mb-8">
+        <GitHubProfile 
+          githubData={githubData} 
+          repositoryCount={repos.length}
+          showActions={true}
+          onLogout={() => {
+            // Clear local storage and redirect to home
+            localStorage.clear();
+            window.location.href = '/';
+          }}
+        />
       </div>
 
       {/* Repository Selection - only for repository type */}
       {readmeType === 'repository' && (
         <div className="bg-white rounded-2xl shadow-xl p-6 mb-8 border border-gray-100">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">Select Repository</h3>
-          <div className="grid gap-4">
-            {repos.map((repo) => (
-              <div
-                key={repo.name}
-                onClick={() => setSelectedRepo(repo.name)}
-                className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
-                  selectedRepo === repo.name
-                    ? 'border-purple-500 bg-purple-50'
-                    : 'border-gray-200 hover:border-gray-300'
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-bold text-gray-800">Select Repository</h3>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setUseEnhancedRepoView(false)}
+                className={`px-3 py-1 rounded-md text-sm transition-colors ${
+                  !useEnhancedRepoView 
+                    ? 'bg-purple-600 text-white' 
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-gray-800">{repo.name}</h4>
-                    <p className="text-gray-600 text-sm">{repo.description}</p>
-                    <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
-                      <span className="flex items-center">
-                        <Code2 className="w-4 h-4 mr-1" />
-                        {repo.language}
-                      </span>
-                      <span className="flex items-center">
-                        <Star className="w-4 h-4 mr-1" />
-                        {repo.stars}
-                      </span>
-                      <span className="flex items-center">
-                        <GitBranch className="w-4 h-4 mr-1" />
-                        {repo.forks}
-                      </span>
-                      <span className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-1" />
-                        {repo.updated_at}
-                      </span>
+                <Grid className="w-4 h-4 inline mr-1" />
+                Simple
+              </button>
+              <button
+                onClick={() => setUseEnhancedRepoView(true)}
+                className={`px-3 py-1 rounded-md text-sm transition-colors ${
+                  useEnhancedRepoView 
+                    ? 'bg-purple-600 text-white' 
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                <List className="w-4 h-4 inline mr-1" />
+                Enhanced
+              </button>
+            </div>
+          </div>
+
+          {useEnhancedRepoView ? (
+            <GitHubRepositoryList
+              showSelection={true}
+              selectedRepository={selectedRepo}
+              onRepositorySelect={handleRepositorySelect}
+              maxResults={20}
+            />
+          ) : (
+            <div className="grid gap-4">
+              {repos.map((repo) => (
+                <div
+                  key={repo.name}
+                  onClick={() => setSelectedRepo(repo.name)}
+                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
+                    selectedRepo === repo.name
+                      ? 'border-purple-500 bg-purple-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-800">{repo.name}</h4>
+                      <p className="text-gray-600 text-sm">{repo.description}</p>
+                      <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                        <span className="flex items-center">
+                          <Code2 className="w-4 h-4 mr-1" />
+                          {repo.language}
+                        </span>
+                        <span className="flex items-center">
+                          <Star className="w-4 h-4 mr-1" />
+                          {repo.stars}
+                        </span>
+                        <span className="flex items-center">
+                          <GitBranch className="w-4 h-4 mr-1" />
+                          {repo.forks}
+                        </span>
+                        <span className="flex items-center">
+                          <Calendar className="w-4 h-4 mr-1" />
+                          {repo.updated_at}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

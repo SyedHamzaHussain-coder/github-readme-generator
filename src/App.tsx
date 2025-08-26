@@ -113,25 +113,14 @@ const App = () => {
         throw new Error('No GitHub token found');
       }
 
-      // Create session token in the format expected by the API
-      const sessionData = { githubToken };
-      const sessionToken = btoa(JSON.stringify(sessionData));
-
-      const response = await fetch('/api/github-repos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          sessionToken 
-        }),
+      // Use the new GitHub API utility function
+      const { fetchGitHubRepositories } = await import('./utils/github');
+      const data = await fetchGitHubRepositories({
+        sort: 'updated',
+        direction: 'desc',
+        perPage: 50,
+        type: 'all'
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch repositories');
-      }
-
-      const data = await response.json();
       
       // Transform the repository data to match our Repository interface
       const formattedRepos = data.repositories.map((repo: any) => ({
@@ -352,28 +341,52 @@ const App = () => {
                 <h1 className="text-xl font-bold">README.ai</h1>
               </div>
               
-              {/* Progress Steps */}
-              <div className="flex items-center space-x-4">
-                {['connect', 'type', 'template', 'generate', 'preview'].map((s, index) => (
-                  <div key={s} className="flex items-center">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      step === s
-                        ? 'bg-purple-600 text-white'
-                        : ['connect', 'type', 'template', 'generate', 'preview'].indexOf(step) > index
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-200 text-gray-600'
-                    }`}>
-                      {index + 1}
+              {/* Progress Steps and User Info */}
+              <div className="flex items-center space-x-6">
+                {/* Progress Steps */}
+                <div className="flex items-center space-x-4">
+                  {['connect', 'type', 'template', 'generate', 'preview'].map((s, index) => (
+                    <div key={s} className="flex items-center">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        step === s
+                          ? 'bg-purple-600 text-white'
+                          : ['connect', 'type', 'template', 'generate', 'preview'].indexOf(step) > index
+                          ? 'bg-green-500 text-white'
+                          : 'bg-gray-200 text-gray-600'
+                      }`}>
+                        {index + 1}
+                      </div>
+                      {index < 4 && (
+                        <div className={`w-8 h-0.5 ${
+                          ['connect', 'type', 'template', 'generate', 'preview'].indexOf(step) > index
+                            ? 'bg-green-500'
+                            : 'bg-gray-200'
+                        }`} />
+                      )}
                     </div>
-                    {index < 4 && (
-                      <div className={`w-8 h-0.5 ${
-                        ['connect', 'type', 'template', 'generate', 'preview'].indexOf(step) > index
-                          ? 'bg-green-500'
-                          : 'bg-gray-200'
-                      }`} />
-                    )}
+                  ))}
+                </div>
+
+                {/* User Info and Logout */}
+                {githubData && (
+                  <div className="flex items-center space-x-3 pl-4 border-l border-gray-200">
+                    <img 
+                      src={githubData.avatar_url} 
+                      alt="Avatar" 
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <span className="text-sm text-gray-700">@{githubData.username}</span>
+                    <button
+                      onClick={() => {
+                        localStorage.clear();
+                        window.location.href = '/';
+                      }}
+                      className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                    >
+                      Logout
+                    </button>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>
