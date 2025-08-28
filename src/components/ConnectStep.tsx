@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Github, Shield, Users, BookOpen, AlertCircle } from 'lucide-react';
 import { GitHubData } from '../types';
-import { getOAuthUrls, logConfig } from '../config';
 
 interface ConnectStepProps {
   isGenerating: boolean;
-  connectToGitHub: () => Promise<void>;
+  connectToGitHub: (forceReauth?: boolean) => Promise<void>;
 }
 
 export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectToGitHub }) => {
@@ -80,29 +79,13 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     }
   };
 
-  const handleGitHubLogin = () => {
-    // Log current configuration for debugging
-    logConfig();
-    
-    // Generate a unique state parameter for security
-    const state = Math.random().toString(36).substring(2, 15);
-    localStorage.setItem('github_oauth_state', state);
-    
-    // Get OAuth URLs using the configuration utility
-    const { githubAuthorize } = getOAuthUrls();
-    const githubAuthUrl = githubAuthorize(state);
-    
-    // For development/demo purposes, show the URL that would be used
-    console.log('🔗 Redirecting to GitHub OAuth:', githubAuthUrl);
-    
-    // Redirect to GitHub OAuth
-    window.location.href = githubAuthUrl;
-  };
-
   const handleLogout = async () => {
     // Clear local storage
     localStorage.removeItem('github_user');
     localStorage.removeItem('github_token');
+    localStorage.removeItem('github_auth_timestamp');
+    localStorage.removeItem('github_auth_success');
+    localStorage.removeItem('github_oauth_state');
     
     // Clear server-side session
     try {
@@ -116,6 +99,9 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     
     setUserInfo(null);
     setIsConnected(false);
+    
+    // Force redirect to ensure clean authentication
+    window.location.href = '/connect';
   };
 
   if (isConnected && userInfo) {
@@ -138,7 +124,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
             
             <div className="flex items-center justify-center space-x-6 mb-6">
               <button
-                onClick={connectToGitHub}
+                onClick={() => connectToGitHub(false)}
                 disabled={isGenerating}
                 className="bg-white text-green-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg transform hover:scale-105 disabled:opacity-50"
               >
@@ -200,7 +186,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
 
           <div className="flex items-center justify-center">
             <button
-              onClick={handleGitHubLogin}
+              onClick={() => connectToGitHub(true)}
               disabled={isGenerating}
               className="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg transform hover:scale-105 disabled:opacity-50 text-lg"
             >

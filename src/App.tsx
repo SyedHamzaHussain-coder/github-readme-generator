@@ -61,13 +61,13 @@ const App = () => {
     loadStoredGitHubData();
   }, [githubData, repos.length]);
 
-  const connectToGitHub = async (): Promise<void> => {
+  const connectToGitHub = async (forceReauth: boolean = false): Promise<void> => {
     try {
       setIsGenerating(true);
       
-      // Check if user is already authenticated
+      // Check if user is already authenticated (unless forced re-auth)
       const savedUserInfo = localStorage.getItem('github_user');
-      if (savedUserInfo) {
+      if (savedUserInfo && !forceReauth) {
         const userData = JSON.parse(savedUserInfo);
         // Transform the GitHub user data to GitHubData format
         const githubDataFormatted: GitHubData = {
@@ -93,9 +93,21 @@ const App = () => {
         return;
       }
 
-      // If not authenticated, redirect to GitHub OAuth
-      // This will be handled by the ConnectStep component
-      console.log('User not authenticated, GitHub OAuth flow will be initiated');
+      // If not authenticated or forced re-auth, trigger GitHub OAuth
+      const { getOAuthUrls } = await import('./config');
+      
+      // Generate a unique state parameter for security
+      const state = Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('github_oauth_state', state);
+      
+      // Get OAuth URLs using the configuration utility
+      const { githubAuthorize } = getOAuthUrls();
+      const githubAuthUrl = githubAuthorize(state);
+      
+      console.log('🔗 Redirecting to GitHub OAuth:', githubAuthUrl);
+      
+      // Redirect to GitHub OAuth
+      window.location.href = githubAuthUrl;
       
     } catch (error) {
       console.error('Failed to connect to GitHub:', error);
@@ -377,9 +389,31 @@ const App = () => {
                     />
                     <span className="text-sm text-gray-700">@{githubData.username}</span>
                     <button
-                      onClick={() => {
-                        localStorage.clear();
-                        window.location.href = '/';
+                      onClick={async () => {
+                        // Clear all GitHub-related data
+                        localStorage.removeItem('github_token');
+                        localStorage.removeItem('github_user');
+                        localStorage.removeItem('github_auth_timestamp');
+                        localStorage.removeItem('github_auth_success');
+                        localStorage.removeItem('github_oauth_state');
+                        
+                        // Optional: Call server-side logout
+                        try {
+                          await fetch('/api/auth/logout', {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json',
+                            },
+                            credentials: 'include',
+                          });
+                        } catch (error) {
+                          console.warn('Server logout failed:', error);
+                        }
+                        
+                        // Clear state and redirect to connect page
+                        setGithubData(null);
+                        setRepos([]);
+                        window.location.href = '/connect';
                       }}
                       className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
                     >

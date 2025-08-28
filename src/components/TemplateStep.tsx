@@ -48,9 +48,13 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
           repositoryCount={repos.length}
           showActions={true}
           onLogout={() => {
-            // Clear local storage and redirect to home
-            localStorage.clear();
-            window.location.href = '/';
+            // Clear local storage and redirect to connect page
+            localStorage.removeItem('github_token');
+            localStorage.removeItem('github_user');
+            localStorage.removeItem('github_auth_timestamp');
+            localStorage.removeItem('github_auth_success');
+            localStorage.removeItem('github_oauth_state');
+            window.location.href = '/connect';
           }}
         />
       </div>
