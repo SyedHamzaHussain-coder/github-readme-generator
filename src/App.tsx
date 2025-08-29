@@ -297,6 +297,14 @@ const App = () => {
                 const data = await response.json();
                 setGeneratedReadme(data.readme);
                 setEditedReadme(data.readme);
+                
+                // Show AI generation status
+                if (data.aiGenerated) {
+                  console.log('✅ README generated using AI:', data.metadata?.generator);
+                } else {
+                  console.log('📄 README generated using templates');
+                }
+                
                 navigate('/preview');
               } catch (error) {
                 console.error('Failed to generate README:', error);

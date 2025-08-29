@@ -98,44 +98,60 @@ module.exports = async function handler(req, res) {
 
       console.log('🚀 Generating README for:', type || 'repository', template || 'minimal');
 
-      // Simulate AI processing time (reduced for serverless)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
       let generatedReadme = '';
 
-      try {
+      // Check if AI generation is available
+      if (process.env.OPENAI_API_KEY) {
+        try {
+          console.log('🤖 Using AI generation...');
+          
+          if (type === 'profile') {
+            generatedReadme = await generateAIProfileReadme(userInfo || githubUser, template || 'minimal');
+          } else {
+            generatedReadme = await generateAIRepositoryReadme(repoData, template || 'minimal');
+          }
+          
+          console.log('✅ AI generation successful');
+        } catch (aiError) {
+          console.warn('⚠️ AI generation failed, falling back to templates:', aiError.message);
+          // Fall back to template generation
+          if (type === 'profile') {
+            generatedReadme = generateProfileReadme(userInfo || githubUser, template || 'minimal');
+          } else {
+            generatedReadme = generateRepositoryReadme(repoData, template || 'minimal');
+          }
+        }
+      } else {
+        console.log('📄 Using template generation (no AI key configured)');
+        // Use template generation
         if (type === 'profile') {
-          // Generate profile README
-          console.log('📄 Generating profile README...');
           generatedReadme = generateProfileReadme(userInfo || githubUser, template || 'minimal');
         } else {
-          // Generate repository README
-          console.log('📁 Generating repository README...');
           generatedReadme = generateRepositoryReadme(repoData, template || 'minimal');
         }
-
-        if (!generatedReadme) {
-          throw new Error('Generated README is empty');
-        }
-
-        console.log('✅ Successfully generated README', {
-          length: generatedReadme.length,
-          wordCount: generatedReadme.split(' ').length
-        });
-      } catch (generateError) {
-        console.error('❌ Error during README generation:', generateError);
-        throw generateError;
       }
+
+      if (!generatedReadme) {
+        throw new Error('Generated README is empty');
+      }
+
+      console.log('✅ Successfully generated README', {
+        length: generatedReadme.length,
+        wordCount: generatedReadme.split(' ').length,
+        aiGenerated: !!process.env.OPENAI_API_KEY
+      });
 
       res.status(200).json({
         success: true,
         readme: generatedReadme,
+        aiGenerated: !!process.env.OPENAI_API_KEY,
         metadata: {
           generatedAt: new Date().toISOString(),
           template: template || 'minimal',
           type: type || 'repository',
           wordCount: generatedReadme.split(' ').length,
           characterCount: generatedReadme.length,
+          generator: process.env.OPENAI_API_KEY ? 'AI (OpenAI GPT)' : 'Template'
         },
       });
 
@@ -347,4 +363,128 @@ MIT License
     console.error('❌ Error generating repository README:', error);
     throw error;
   }
+}
+
+// AI-powered profile README generation
+async function generateAIProfileReadme(userInfo, template) {
+  const { name, login, bio, company, location, blog, public_repos, followers, following } = userInfo;
+  
+  const prompt = `Generate a professional GitHub profile README for a developer with the following information:
+
+Name: ${name || login}
+Username: ${login}
+Bio: ${bio || 'Not provided'}
+Company: ${company || 'Not provided'}
+Location: ${location || 'Not provided'}
+Website: ${blog || 'Not provided'}
+Public Repositories: ${public_repos || 0}
+Followers: ${followers || 0}
+Following: ${following || 0}
+
+Style: ${template || 'minimal'} (minimal = simple and clean, comprehensive = detailed with stats, creative = unique design elements, professional = business-oriented)
+
+Requirements:
+- Use proper Markdown formatting
+- Include appropriate emojis
+- Add GitHub stats badges and widgets using username "${login}"
+- Make it engaging and professional
+- Include sections for skills, projects, and contact
+- Use the actual username "${login}" in all GitHub links and stats
+- Keep it between 300-800 words
+- Make it unique and personalized based on the provided information
+
+Generate only the README content, no explanations or additional text.`;
+
+  return await callOpenAI(prompt);
+}
+
+// AI-powered repository README generation
+async function generateAIRepositoryReadme(repoData, template) {
+  const { repository } = repoData;
+  const { name, description, language, html_url, full_name } = repository;
+  
+  const prompt = `Generate a professional README.md for a GitHub repository with the following information:
+
+Repository Name: ${name}
+Description: ${description || 'Not provided'}
+Primary Language: ${language || 'Not specified'}
+Repository URL: ${html_url || ''}
+Full Name: ${full_name || ''}
+
+Style: ${template || 'minimal'} (minimal = essential info only, comprehensive = detailed documentation, professional = enterprise-grade with all sections)
+
+Requirements:
+- Use proper Markdown formatting
+- Include installation and usage instructions
+- Add appropriate badges and shields
+- Include sections for: Features, Installation, Usage, Contributing, License
+- Make it professional and informative
+- Use actual repository information provided
+- Include code examples where appropriate
+- Keep it between 400-1000 words depending on template
+- Make it specific to the project type based on the language
+
+Generate only the README content, no explanations or additional text.`;
+
+  return await callOpenAI(prompt);
+}
+
+// OpenAI API call function
+async function callOpenAI(prompt) {
+  const https = require('https');
+  const apiKey = process.env.OPENAI_API_KEY;
+  
+  if (!apiKey) {
+    throw new Error('OpenAI API key not configured');
+  }
+  
+  const data = JSON.stringify({
+    model: "gpt-4o-mini", // Using the more cost-effective model
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert technical writer specializing in creating professional README files for GitHub repositories and profiles. Generate clear, engaging, and well-structured documentation using proper Markdown formatting."
+      },
+      {
+        role: "user", 
+        content: prompt
+      }
+    ],
+    max_tokens: 2000,
+    temperature: 0.7
+  });
+
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.openai.com',
+      path: '/v1/chat/completions',
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'Content-Length': data.length
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let responseData = '';
+      res.on('data', (chunk) => responseData += chunk);
+      res.on('end', () => {
+        try {
+          const response = JSON.parse(responseData);
+          if (response.choices && response.choices[0]) {
+            resolve(response.choices[0].message.content);
+          } else {
+            throw new Error('Invalid OpenAI response format');
+          }
+        } catch (err) {
+          reject(new Error(`OpenAI API error: ${err.message}`));
+        }
+      });
+    });
+
+    req.on('error', (err) => reject(err));
+    req.write(data);
+    req.end();
+  });
 }
