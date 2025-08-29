@@ -1,6 +1,6 @@
 export type ReadmeType = 'repository' | 'profile';
 
-export type StepType = 'landing' | 'examples' | 'connect' | 'type' | 'template' | 'generate' | 'preview';
+export type StepType = 'landing' | 'examples' | 'connect' | 'type' | 'template' | 'generate' | 'preview' | 'enhanced';
 
 export interface Template {
   id: string;

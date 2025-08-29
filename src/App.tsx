@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ConnectStep } from './components/ConnectStep';
 import { TemplateStep } from './components/TemplateStep';
 import { PreviewStep } from './components/PreviewStep';
+import { EnhancedReadmeBuilder } from './components/EnhancedReadmeBuilder';
 import { GitHubData, Repository, ReadmeType, StepType } from './types';
 import { repositoryTemplates, profileTemplates } from './constants/templates';
 
@@ -21,6 +22,7 @@ const App = () => {
   const [previewMode, setPreviewMode] = useState(true);
   const [repos, setRepos] = useState<Repository[]>([]);
   const [selectedRepo, setSelectedRepo] = useState('');
+  const [enhancedMode, setEnhancedMode] = useState(false);
 
   // Load GitHub data on component mount if user is already authenticated
   useEffect(() => {
@@ -221,6 +223,24 @@ const App = () => {
                   Profile README
                 </button>
               </div>
+              
+              {/* Enhanced Mode Option */}
+              <div className="border-t pt-6 w-full max-w-md">
+                <h3 className="text-lg font-semibold mb-3">🚀 Enhanced Mode</h3>
+                <p className="text-gray-600 text-sm mb-4">
+                  Try our new enhanced README builder with AI-powered analysis, visual editor, and specialized templates.
+                </p>
+                <button
+                  onClick={() => {
+                    setEnhancedMode(true);
+                    setReadmeType('repository');
+                    navigate('/enhanced');
+                  }}
+                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  🎨 Try Enhanced Builder
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -386,6 +406,26 @@ const App = () => {
             }}
             onUpload={() => {
               alert('This feature would upload the README to GitHub. Implementation pending.');
+            }}
+          />
+        );
+      case 'enhanced':
+        if (!githubData) {
+          return (
+            <div className="text-center p-8">
+              <h2 className="text-2xl font-bold mb-4">Loading GitHub Data...</h2>
+              <p className="text-gray-600">Please wait while we load your GitHub profile information.</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-4 border-purple-600 border-t-transparent mx-auto mt-4"></div>
+            </div>
+          );
+        }
+        return (
+          <EnhancedReadmeBuilder
+            repositoryUrl={selectedRepo ? `https://github.com/${githubData.username}/${selectedRepo}` : undefined}
+            githubToken={localStorage.getItem('github_token') || undefined}
+            onReadmeGenerated={(markdown) => {
+              setGeneratedReadme(markdown);
+              setEditedReadme(markdown);
             }}
           />
         );
