@@ -10,6 +10,46 @@ interface ConnectStepProps {
 export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectToGitHub }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [userInfo, setUserInfo] = useState<GitHubData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const checkAuthStatus = async () => {
+    try {
+      const token = localStorage.getItem('github_token');
+      if (!token) {
+        setIsConnected(false);
+        setUserInfo(null);
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch('/api/auth/check', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (data.authenticated && data.user) {
+        setUserInfo(data.user);
+        setIsConnected(true);
+        // Update localStorage with fresh user data
+        localStorage.setItem('github_user', JSON.stringify(data.user));
+      } else {
+        setIsConnected(false);
+        setUserInfo(null);
+        // Clear invalid data
+        localStorage.removeItem('github_user');
+        localStorage.removeItem('github_token');
+      }
+    } catch (error) {
+      console.error('Auth check failed:', error);
+      setIsConnected(false);
+      setUserInfo(null);
+    }
+    setLoading(false);
+  };
 
   // Check if user is already connected and handle OAuth callback
   useEffect(() => {
@@ -29,6 +69,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
       localStorage.removeItem('github_oauth_state');
       setUserInfo(null);
       setIsConnected(false);
+      setLoading(false);
       
       // Clean up URL
       window.history.replaceState({}, document.title, '/connect');
@@ -45,6 +86,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     if (error) {
       console.error('OAuth error:', error);
       alert('GitHub authentication failed. Please try again.');
+      setLoading(false);
       return;
     }
 
@@ -55,6 +97,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
       if (state !== savedState) {
         console.error('OAuth state mismatch');
         alert('Security error during authentication. Please try again.');
+        setLoading(false);
         return;
       }
 
@@ -63,21 +106,8 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
       return;
     }
 
-    // Check if user is already connected (from localStorage or session)
-    const savedUserInfo = localStorage.getItem('github_user');
-    console.log('🔍 Saved user info:', !!savedUserInfo);
-    
-    if (savedUserInfo) {
-      try {
-        const userData = JSON.parse(savedUserInfo);
-        console.log('🔍 Setting user as connected:', userData.login);
-        setUserInfo(userData);
-        setIsConnected(true);
-      } catch (error) {
-        console.error('🔍 Failed to parse saved user info:', error);
-        localStorage.removeItem('github_user');
-      }
-    }
+    // Check authentication status with the server
+    checkAuthStatus();
   }, []);
 
   const handleOAuthCallback = async (code: string) => {
@@ -115,20 +145,32 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
   const handleLogout = async () => {
     console.log('🚪 Starting logout process...');
     
-    // Clear local storage
+    // Get the current token for proper logout
+    const token = localStorage.getItem('github_token');
+    
+    // Clear local storage and session storage
     localStorage.removeItem('github_user');
     localStorage.removeItem('github_token');
     localStorage.removeItem('github_auth_timestamp');
     localStorage.removeItem('github_auth_success');
     localStorage.removeItem('github_oauth_state');
+    sessionStorage.removeItem('github_user');
+    sessionStorage.removeItem('github_token');
     
     console.log('🧹 Local storage cleared');
     
-    // Clear server-side session
+    // Clear server-side session with token
     try {
       await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify({
+          token: token
+        })
       });
       console.log('✅ Server-side logout successful');
     } catch (error) {
@@ -142,6 +184,112 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     // Force redirect with logout parameter to ensure clean authentication
     window.location.href = '/connect?logout=true';
   };
+
+  const handleUseDifferentAccount = async () => {
+    try {
+      console.log('🔄 Starting "Use Different Account" process...');
+      
+      // Get the current token for proper logout
+      const token = localStorage.getItem('github_token');
+      
+      // First, logout from the current session with token
+      await fetch('/api/auth/logout', { 
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify({
+          token: token
+        })
+      });
+      
+      // Clear any local storage and session storage
+      localStorage.removeItem('github_token');
+      localStorage.removeItem('github_user');
+      localStorage.removeItem('github_auth_timestamp');
+      localStorage.removeItem('github_auth_success');
+      localStorage.removeItem('github_oauth_state');
+      sessionStorage.removeItem('github_user');
+      sessionStorage.removeItem('github_token');
+      
+      console.log('🧹 Session and storage cleared');
+      
+      // Get environment variables for OAuth
+      const { getOAuthUrls } = await import('../config');
+      
+      // Generate a unique state parameter for security
+      const state = Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('github_oauth_state', state);
+      
+      // Get OAuth URLs using the configuration utility
+      const { githubAuthorize } = getOAuthUrls();
+      
+      // Force GitHub logout and account selection by using GitHub's logout URL
+      const oauthParams = new URLSearchParams({
+        client_id: import.meta.env.VITE_GITHUB_CLIENT_ID || 'Ov23li3OjcXsV4D0EyK4',
+        redirect_uri: `${window.location.origin}/auth/callback`,
+        scope: 'read:user user:email public_repo',
+        state: state,
+        // These parameters force account selection
+        prompt: 'select_account',
+        allow_signup: 'true'
+      });
+      
+      const githubAuthUrl = `https://github.com/login/oauth/authorize?${oauthParams}`;
+      
+      console.log('🔗 Redirecting to GitHub with forced account selection');
+      
+      // Redirect to GitHub logout first, then to OAuth with account selection
+      window.location.href = `https://github.com/logout?return_to=${encodeURIComponent(githubAuthUrl)}`;
+      
+    } catch (error) {
+      console.error('❌ Use different account failed:', error);
+      
+      // Fallback: direct redirect with prompt parameter
+      try {
+        const { getOAuthUrls } = await import('../config');
+        const state = Math.random().toString(36).substring(2, 15);
+        localStorage.setItem('github_oauth_state', state);
+        
+        const oauthParams = new URLSearchParams({
+          client_id: import.meta.env.VITE_GITHUB_CLIENT_ID || 'Ov23li3OjcXsV4D0EyK4',
+          redirect_uri: `${window.location.origin}/auth/callback`,
+          scope: 'read:user user:email public_repo',
+          state: state,
+          prompt: 'select_account'
+        });
+        
+        const fallbackUrl = `https://github.com/login/oauth/authorize?${oauthParams}`;
+        console.log('🔗 Fallback: Direct OAuth with account selection');
+        window.location.href = fallbackUrl;
+        
+      } catch (fallbackError) {
+        console.error('❌ Fallback also failed:', fallbackError);
+        alert('Failed to logout and switch accounts. Please try again.');
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="text-center max-w-2xl mx-auto">
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+          <div className="relative bg-white rounded-3xl shadow-2xl p-12 border border-gray-100">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-600 border-t-transparent mx-auto mb-6"></div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              Checking Authentication Status
+            </h2>
+            <p className="text-gray-600">
+              Please wait while we verify your GitHub connection...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isConnected && userInfo) {
     return (
@@ -181,7 +329,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
               </button>
               
               <button
-                onClick={handleLogout}
+                onClick={handleUseDifferentAccount}
                 className="text-green-100 hover:text-white transition-colors underline"
               >
                 Use different account

@@ -49,11 +49,13 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
         'github_token',
         'github_user', 
         'github_auth_timestamp',
-        'github_auth_success'
+        'github_auth_success',
+        'github_oauth_state'
       ];
       
       keysToRemove.forEach(key => {
         localStorage.removeItem(key);
+        sessionStorage.removeItem(key);
       });
       
       console.log('🧹 Client-side data cleared');
@@ -69,6 +71,7 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
+            credentials: 'include',
             body: JSON.stringify({
               token: token
             })

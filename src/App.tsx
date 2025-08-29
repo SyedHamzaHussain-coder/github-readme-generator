@@ -396,20 +396,32 @@ const App = () => {
                     <button
                       onClick={async () => {
                         // Clear all GitHub-related data
+                        // Get current token for proper logout
+                        const token = localStorage.getItem('github_token');
+                        
+                        // Clear localStorage first
                         localStorage.removeItem('github_token');
                         localStorage.removeItem('github_user');
                         localStorage.removeItem('github_auth_timestamp');
                         localStorage.removeItem('github_auth_success');
                         localStorage.removeItem('github_oauth_state');
                         
-                        // Optional: Call server-side logout
+                        // Also clear sessionStorage
+                        sessionStorage.removeItem('github_user');
+                        sessionStorage.removeItem('github_token');
+                        
+                        // Call server-side logout with token
                         try {
                           await fetch('/api/auth/logout', {
                             method: 'POST',
                             headers: {
                               'Content-Type': 'application/json',
+                              ...(token && { 'Authorization': `Bearer ${token}` })
                             },
                             credentials: 'include',
+                            body: JSON.stringify({
+                              token: token
+                            })
                           });
                         } catch (error) {
                           console.warn('Server logout failed:', error);

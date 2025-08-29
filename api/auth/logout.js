@@ -9,15 +9,23 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
+
   try {
     console.log('🔍 Logout Debug Info:');
     console.log('Method:', req.method);
     console.log('Headers:', req.headers);
     console.log('Body:', req.body);
 
-    // For GitHub OAuth, we don't need to revoke tokens on the server side
-    // The client-side logout (clearing localStorage) is sufficient
-    // But we can optionally revoke the GitHub token if needed
+    // Clear session cookies with proper expiration
+    res.setHeader('Set-Cookie', [
+      'auth-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=Lax',
+      'github-session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=Lax',
+      'github_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=Lax',
+      'github_user=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=Lax'
+    ]);
 
     let token = null;
     
@@ -28,6 +36,9 @@ export default async function handler(req, res) {
     } else if (req.body?.token) {
       token = req.body.token;
       console.log('🔐 Token found in request body');
+    } else if (req.cookies?.['auth-token']) {
+      token = req.cookies['auth-token'];
+      console.log('🔐 Token found in cookies');
     }
 
     // Optional: Revoke GitHub token
@@ -67,7 +78,7 @@ export default async function handler(req, res) {
     // Return success response
     const response = {
       success: true,
-      message: 'Successfully logged out',
+      message: 'Logged out successfully',
       timestamp: new Date().toISOString()
     };
 
