@@ -63,11 +63,15 @@ const App = () => {
 
   const connectToGitHub = async (forceReauth: boolean = false): Promise<void> => {
     try {
+      console.log('🚀 connectToGitHub called with forceReauth:', forceReauth);
       setIsGenerating(true);
       
       // Check if user is already authenticated (unless forced re-auth)
       const savedUserInfo = localStorage.getItem('github_user');
+      console.log('🔍 Saved user info exists:', !!savedUserInfo);
+      
       if (savedUserInfo && !forceReauth) {
+        console.log('🔍 User already authenticated, using saved data');
         const userData = JSON.parse(savedUserInfo);
         // Transform the GitHub user data to GitHubData format
         const githubDataFormatted: GitHubData = {
@@ -94,6 +98,7 @@ const App = () => {
       }
 
       // If not authenticated or forced re-auth, trigger GitHub OAuth
+      console.log('🔗 Triggering GitHub OAuth flow');
       const { getOAuthUrls } = await import('./config');
       
       // Generate a unique state parameter for security
@@ -110,7 +115,7 @@ const App = () => {
       window.location.href = githubAuthUrl;
       
     } catch (error) {
-      console.error('Failed to connect to GitHub:', error);
+      console.error('❌ Failed to connect to GitHub:', error);
       alert('Failed to connect to GitHub. Please try again.');
     } finally {
       setIsGenerating(false);
@@ -410,10 +415,10 @@ const App = () => {
                           console.warn('Server logout failed:', error);
                         }
                         
-                        // Clear state and redirect to connect page
+                        // Clear state and redirect to connect page with logout parameter
                         setGithubData(null);
                         setRepos([]);
-                        window.location.href = '/connect';
+                        window.location.href = '/connect?logout=true';
                       }}
                       className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
                     >

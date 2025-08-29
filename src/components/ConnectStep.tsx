@@ -13,11 +13,34 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
 
   // Check if user is already connected and handle OAuth callback
   useEffect(() => {
-    // Handle OAuth callback
+    console.log('🔍 ConnectStep useEffect - checking authentication state');
+    
+    // Check for logout parameter to force clean state
     const urlParams = new URLSearchParams(window.location.search);
+    const loggedOut = urlParams.get('logout') === 'true';
+    
+    if (loggedOut) {
+      console.log('🔍 Logout parameter detected, forcing clean state');
+      // Clear any remaining data and remove logout parameter from URL
+      localStorage.removeItem('github_user');
+      localStorage.removeItem('github_token');
+      localStorage.removeItem('github_auth_timestamp');
+      localStorage.removeItem('github_auth_success');
+      localStorage.removeItem('github_oauth_state');
+      setUserInfo(null);
+      setIsConnected(false);
+      
+      // Clean up URL
+      window.history.replaceState({}, document.title, '/connect');
+      return;
+    }
+    
+    // Handle OAuth callback
     const code = urlParams.get('code');
     const state = urlParams.get('state');
     const error = urlParams.get('error');
+
+    console.log('🔍 URL params:', { code: !!code, state: !!state, error });
 
     if (error) {
       console.error('OAuth error:', error);
@@ -26,6 +49,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     }
 
     if (code && state) {
+      console.log('🔍 OAuth callback detected, processing...');
       // Verify state parameter
       const savedState = localStorage.getItem('github_oauth_state');
       if (state !== savedState) {
@@ -41,9 +65,18 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
 
     // Check if user is already connected (from localStorage or session)
     const savedUserInfo = localStorage.getItem('github_user');
+    console.log('🔍 Saved user info:', !!savedUserInfo);
+    
     if (savedUserInfo) {
-      setUserInfo(JSON.parse(savedUserInfo));
-      setIsConnected(true);
+      try {
+        const userData = JSON.parse(savedUserInfo);
+        console.log('🔍 Setting user as connected:', userData.login);
+        setUserInfo(userData);
+        setIsConnected(true);
+      } catch (error) {
+        console.error('🔍 Failed to parse saved user info:', error);
+        localStorage.removeItem('github_user');
+      }
     }
   }, []);
 
@@ -80,6 +113,8 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
   };
 
   const handleLogout = async () => {
+    console.log('🚪 Starting logout process...');
+    
     // Clear local storage
     localStorage.removeItem('github_user');
     localStorage.removeItem('github_token');
@@ -87,21 +122,25 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     localStorage.removeItem('github_auth_success');
     localStorage.removeItem('github_oauth_state');
     
+    console.log('🧹 Local storage cleared');
+    
     // Clear server-side session
     try {
       await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include',
       });
+      console.log('✅ Server-side logout successful');
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error('❌ Server logout error:', error);
     }
     
     setUserInfo(null);
     setIsConnected(false);
     
-    // Force redirect to ensure clean authentication
-    window.location.href = '/connect';
+    console.log('🔄 Redirecting to /connect with logout parameter');
+    // Force redirect with logout parameter to ensure clean authentication
+    window.location.href = '/connect?logout=true';
   };
 
   if (isConnected && userInfo) {

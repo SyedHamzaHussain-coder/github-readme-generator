@@ -54,7 +54,7 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
             localStorage.removeItem('github_auth_timestamp');
             localStorage.removeItem('github_auth_success');
             localStorage.removeItem('github_oauth_state');
-            window.location.href = '/connect';
+            window.location.href = '/connect?logout=true';
           }}
         />
       </div>

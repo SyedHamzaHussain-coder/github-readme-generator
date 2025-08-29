@@ -90,8 +90,8 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
       
       console.log('🎉 Logout complete');
       
-      // Redirect to connect page for re-authentication
-      window.location.href = '/connect';
+      // Redirect to connect page for re-authentication with logout parameter
+      window.location.href = '/connect?logout=true';
       
     } catch (error) {
       console.error('❌ Logout error:', error);
