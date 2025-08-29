@@ -249,22 +249,49 @@ const App = () => {
               navigate('/generate');
               
               try {
+                // Get the GitHub token for authorization
+                const token = localStorage.getItem('github_token');
+                
+                if (!token) {
+                  throw new Error('No GitHub token found. Please reconnect your account.');
+                }
+
                 // Use our secure API endpoint for README generation
                 const response = await fetch('/api/generate-readme', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                   },
                   credentials: 'include',
                   body: JSON.stringify({
                     type: readmeType,
                     template: selectedTemplate,
-                    repository: readmeType === 'repository' ? selectedRepo : undefined,
+                    repoData: readmeType === 'repository' ? {
+                      repository: {
+                        name: selectedRepo,
+                        full_name: `${githubData?.username}/${selectedRepo}`,
+                        description: '',
+                        html_url: `https://github.com/${githubData?.username}/${selectedRepo}`,
+                        language: 'JavaScript',
+                        owner: { login: githubData?.username }
+                      },
+                      analysis: {},
+                      packageJson: null,
+                      projectType: 'JavaScript',
+                      languages: {}
+                    } : undefined,
+                    userInfo: readmeType === 'profile' ? githubData : undefined,
                   }),
                 });
 
                 if (!response.ok) {
-                  throw new Error('Failed to generate README');
+                  if (response.status === 404 && window.location.hostname === 'localhost') {
+                    // In development, API routes may not be available
+                    throw new Error('API not available in development mode');
+                  }
+                  const errorText = await response.text();
+                  throw new Error(`Failed to generate README: ${errorText}`);
                 }
 
                 const data = await response.json();
@@ -273,13 +300,30 @@ const App = () => {
                 navigate('/preview');
               } catch (error) {
                 console.error('Failed to generate README:', error);
+                
+                // Show specific error message
+                let errorMessage = 'Failed to generate README. ';
+                if (error instanceof Error) {
+                  if (error.message.includes('No GitHub token')) {
+                    errorMessage += 'Please reconnect your GitHub account.';
+                  } else if (error.message.includes('API not available in development')) {
+                    errorMessage += 'API generation not available in development mode. Using template preview.';
+                  } else if (error.message.includes('Failed to generate README')) {
+                    errorMessage += 'Server error occurred. Using template preview instead.';
+                  } else {
+                    errorMessage += error.message;
+                  }
+                } else {
+                  errorMessage += 'Using template preview instead.';
+                }
+                
                 // Fallback to template preview
                 const template = (readmeType === 'repository' ? repositoryTemplates : profileTemplates)
                   .find(t => t.id === selectedTemplate);
                 setGeneratedReadme(template?.preview || '');
                 setEditedReadme(template?.preview || '');
                 navigate('/preview');
-                alert('Using template preview. AI generation failed.');
+                alert(errorMessage);
               } finally {
                 setIsGenerating(false);
               }

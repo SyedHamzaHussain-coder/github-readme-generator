@@ -1,6 +1,6 @@
 module.exports = async function handler(req, res) {
   // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', process.env.REACT_APP_BASE_URL || 'https://github-readme-generator-delta.vercel.app');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -13,46 +13,93 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+    console.log('📝 Generate README API called');
+    console.log('Method:', req.method);
+    console.log('Headers:', req.headers);
+    console.log('Body keys:', Object.keys(req.body || {}));
+    
     const { repoData, template, type, userInfo } = req.body;
     const { authorization } = req.headers;
 
+    console.log('Request params:', { 
+      hasRepoData: !!repoData, 
+      template, 
+      type, 
+      hasUserInfo: !!userInfo,
+      hasAuth: !!authorization 
+    });
+
     if (!authorization) {
+      console.error('❌ Missing authorization header');
       return res.status(401).json({ error: 'Authorization header required' });
     }
 
     if (!repoData && !userInfo) {
+      console.error('❌ Missing repository data and user info');
       return res.status(400).json({ error: 'Repository data or user info is required' });
     }
 
-    // Extract session token
-    const sessionToken = authorization.replace('Bearer ', '');
+    if (!template) {
+      console.warn('⚠️ No template specified, using minimal');
+    }
+
+    if (!type) {
+      console.warn('⚠️ No type specified, defaulting to repository');
+    }
+
+    // Extract GitHub token from authorization header
+    const githubToken = authorization.replace('Bearer ', '');
     
     try {
-      // Decode session data
-      const sessionData = JSON.parse(Buffer.from(sessionToken, 'base64').toString());
-      const { userId, createdAt } = sessionData;
+      console.log('🔍 Validating GitHub token...');
+      
+      // Verify token with GitHub API first
+      const githubResponse = await fetch('https://api.github.com/user', {
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'GitHub-README-Generator'
+        }
+      });
 
-      // Check if session is expired
-      if (Date.now() - createdAt > 24 * 60 * 60 * 1000) {
-        return res.status(401).json({ error: 'Session expired' });
+      if (!githubResponse.ok) {
+        console.error('❌ GitHub token validation failed:', githubResponse.status);
+        return res.status(401).json({ error: 'Invalid GitHub token' });
       }
 
-      console.log('Generating README for:', type, template);
+      const githubUser = await githubResponse.json();
+      console.log('✅ GitHub token validated for user:', githubUser.login);
+
+      console.log('🚀 Generating README for:', type || 'repository', template || 'minimal');
 
       // Simulate AI processing time
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       let generatedReadme = '';
 
-      if (type === 'profile') {
-        // Generate profile README
-        generatedReadme = generateProfileReadme(userInfo, template);
-      } else {
-        // Generate repository README
-        generatedReadme = generateRepositoryReadme(repoData, template);
-      }
+      try {
+        if (type === 'profile') {
+          // Generate profile README
+          console.log('📄 Generating profile README...');
+          generatedReadme = generateProfileReadme(userInfo || githubUser, template || 'minimal');
+        } else {
+          // Generate repository README
+          console.log('📁 Generating repository README...');
+          generatedReadme = generateRepositoryReadme(repoData, template || 'minimal');
+        }
 
-      console.log('Successfully generated README');
+        if (!generatedReadme) {
+          throw new Error('Generated README is empty');
+        }
+
+        console.log('✅ Successfully generated README', {
+          length: generatedReadme.length,
+          wordCount: generatedReadme.split(' ').length
+        });
+      } catch (generateError) {
+        console.error('❌ Error during README generation:', generateError);
+        throw generateError;
+      }
 
       res.status(200).json({
         success: true,
@@ -66,19 +113,42 @@ module.exports = async function handler(req, res) {
         },
       });
 
-    } catch (decodeError) {
-      console.error('Invalid session token:', decodeError);
-      return res.status(401).json({ error: 'Invalid session token' });
+    } catch (validationError) {
+      console.error('Token validation error:', validationError);
+      return res.status(401).json({ error: 'Token validation failed' });
     }
 
   } catch (error) {
-    console.error('Generate README Error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('💥 Generate README Error:', error);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    
+    // Return detailed error information in development
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+    
+    res.status(500).json({ 
+      error: 'Internal server error',
+      ...(isDevelopment && {
+        details: error.message,
+        stack: error.stack
+      })
+    });
   }
 }
 
 function generateProfileReadme(userInfo, template) {
-  const { name, login, bio, company, location, blog } = userInfo;
+  try {
+    if (!userInfo) {
+      throw new Error('User info is required for profile README');
+    }
+
+    const { name, login, bio, company, location, blog } = userInfo;
+    
+    if (!login) {
+      throw new Error('User login is required for profile README');
+    }
+
+    console.log('📝 Generating profile README for:', login, 'with template:', template);
   
   const templates = {
     minimal: `# Hi there! 👋 I'm ${name || login}
@@ -188,11 +258,31 @@ const ${login.toLowerCase()} = {
   };
 
   return templates[template] || templates.minimal;
+  } catch (error) {
+    console.error('❌ Error generating profile README:', error);
+    throw error;
+  }
 }
 
 function generateRepositoryReadme(repoData, template) {
-  const { repository, analysis, packageJson, projectType, languages } = repoData;
-  const { name, description, language, topics, html_url } = repository;
+  try {
+    if (!repoData) {
+      throw new Error('Repository data is required for repository README');
+    }
+
+    const { repository, analysis, packageJson, projectType, languages } = repoData;
+    
+    if (!repository) {
+      throw new Error('Repository information is required');
+    }
+
+    const { name, description, language, topics, html_url } = repository;
+    
+    if (!name) {
+      throw new Error('Repository name is required');
+    }
+
+    console.log('📁 Generating repository README for:', name, 'with template:', template);
   
   // Get top languages
   const topLanguages = Object.entries(languages || {})
@@ -536,4 +626,8 @@ Made with ❤️ by the ${name} team
   };
 
   return templates[template] || templates.minimal;
+  } catch (error) {
+    console.error('❌ Error generating repository README:', error);
+    throw error;
+  }
 }
