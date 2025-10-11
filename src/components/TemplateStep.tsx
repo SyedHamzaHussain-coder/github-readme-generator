@@ -35,7 +35,7 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
   return (
     <div className="max-w-6xl mx-auto">
       <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
+        <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
           Choose Your {readmeType === 'repository' ? 'Repository' : 'Profile'} Template
         </h2>
         <p className="text-gray-600 text-lg">Select a template that matches your style</p>
@@ -69,7 +69,7 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
                 onClick={() => setUseEnhancedRepoView(false)}
                 className={`px-3 py-1 rounded-md text-sm transition-colors ${
                   !useEnhancedRepoView 
-                    ? 'bg-purple-600 text-white' 
+                    ? 'bg-primary text-white' 
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -80,7 +80,7 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
                 onClick={() => setUseEnhancedRepoView(true)}
                 className={`px-3 py-1 rounded-md text-sm transition-colors ${
                   useEnhancedRepoView 
-                    ? 'bg-purple-600 text-white' 
+                    ? 'bg-primary text-white' 
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -105,7 +105,7 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
                   onClick={() => setSelectedRepo(repo.name)}
                   className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
                     selectedRepo === repo.name
-                      ? 'border-purple-500 bg-purple-50'
+                      ? 'border-primary bg-primary/10'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -148,13 +148,13 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
             onClick={() => setSelectedTemplate(template.id)}
             className={`bg-white rounded-2xl shadow-xl p-6 cursor-pointer transition-all duration-300 border-2 ${
               selectedTemplate === template.id
-                ? 'border-purple-500 shadow-2xl transform scale-105'
+                ? 'border-primary shadow-2xl transform scale-105'
                 : 'border-gray-100 hover:border-gray-200 hover:shadow-2xl hover:transform hover:scale-102'
             }`}
           >
             <div className="text-center mb-4">
               <Wand2 className={`w-8 h-8 mx-auto mb-3 ${
-                selectedTemplate === template.id ? 'text-purple-600' : 'text-gray-400'
+                selectedTemplate === template.id ? 'text-primary' : 'text-gray-400'
               }`} />
               <h3 className="font-bold text-gray-800">{template.name}</h3>
               <p className="text-sm text-gray-600">{template.description}</p>
@@ -171,7 +171,7 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
           <button
             onClick={onGenerate}
             disabled={readmeType === 'repository' && !selectedRepo}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-gradient-to-r from-primary to-secondary text-white px-8 py-4 rounded-full font-semibold hover:shadow-2xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <div className="flex items-center space-x-2">
               <Wand2 className="w-5 h-5" />

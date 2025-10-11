@@ -36,7 +36,7 @@ export default function LandingPage(): JSX.Element {
       {/* Navigation */}
       <nav className="relative z-10 flex justify-between items-center px-6 py-3 max-w-7xl mx-auto">
         <div className="flex items-center space-x-3">
-          <div className="bg-gradient-to-r from-purple-500 to-blue-500 p-2 rounded-xl shadow-2xl">
+          <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl shadow-2xl">
             <Sparkles className="w-8 h-8" />
           </div>
           <div>
@@ -50,7 +50,7 @@ export default function LandingPage(): JSX.Element {
       <div className="relative z-10 grid grid-cols-2 gap-16 max-w-8xl mx-auto px-8 min-h-[calc(100vh-80px)] py-8">
         {/* Left Side - Text Content */}
         <div className="flex flex-col justify-start pt-16 space-y-6 pr-8">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
-          <div className="inline-flex items-center bg-purple-500/20 rounded-full px-4 py-2 w-fit backdrop-blur-sm border border-purple-500/30">
+          <div className="inline-flex items-center bg-purple-500/20 rounded-full px-4 py-2 w-fit backdrop-blur-sm border border-primary/30">
             <Zap className="w-4 h-4 mr-2 text-yellow-400" />
             <span className="text-sm font-medium">AI-Powered • Lightning Fast • Professional</span>
           </div>
@@ -79,7 +79,7 @@ export default function LandingPage(): JSX.Element {
             
             <button 
               onClick={() => navigate('/examples')}
-              className="border border-purple-500/50 hover:border-purple-400 px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:bg-purple-500/10 backdrop-blur-sm"
+              className="border border-primary/50 hover:border-purple-400 px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:bg-purple-500/10 backdrop-blur-sm"
             >
               View Examples
             </button>
@@ -88,21 +88,21 @@ export default function LandingPage(): JSX.Element {
           {/* Feature highlights */}
           <div className="grid grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl flex items-center justify-center mx-auto mb-3">
                 <Code className="w-6 h-6 text-purple-400" />
               </div>
               <div className="text-2xl font-bold text-white mb-1">50k+</div>
               <div className="text-sm text-gray-400">READMEs Generated</div>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-secondary/20 to-indigo-500/20 rounded-xl flex items-center justify-center mx-auto mb-3">
                 <Users className="w-6 h-6 text-blue-400" />
               </div>
               <div className="text-2xl font-bold text-white mb-1">10k+</div>
               <div className="text-sm text-gray-400">Happy Developers</div>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-indigo-500/20 to-primary/20 rounded-xl flex items-center justify-center mx-auto mb-3">
                 <TrendingUp className="w-6 h-6 text-indigo-400" />
               </div>
               <div className="text-2xl font-bold text-white mb-1">99%</div>
@@ -133,14 +133,14 @@ export default function LandingPage(): JSX.Element {
                style={{ transformStyle: 'preserve-3d', animation: 'floatAndTilt 8s ease-in-out infinite' }}>
             <div className="relative cursor-pointer perspective-1000" style={{ transform: 'rotateY(-15deg) rotateX(8deg)', transformStyle: 'preserve-3d' }}>
               <div className="absolute -inset-3 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 rounded-3xl blur-2xl opacity-40 group-hover:opacity-80 group-hover:animate-pulse transition-all duration-700"></div>
-              <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-8 shadow-2xl relative backdrop-blur-xl border border-gray-700/50 group-hover:border-purple-500/50 transition-all duration-500">
+              <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-8 shadow-2xl relative backdrop-blur-xl border border-gray-700/50 group-hover:border-primary/50 transition-all duration-500">
                 {/* Glass effect overlay */}
                 <div className="absolute inset-0 bg-white/5 rounded-2xl backdrop-blur-sm"></div>
                 
                 {/* Header */}
                 <div className="relative z-10">
                   <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 p-0.5 rotate-12 hover:rotate-45 transition-transform duration-500">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-primary to-secondary p-0.5 rotate-12 hover:rotate-45 transition-transform duration-500">
                       <div className="w-full h-full rounded-lg bg-gray-900 flex items-center justify-center -rotate-12">
                         <span className="text-lg">�</span>
                       </div>
@@ -188,22 +188,22 @@ export default function LandingPage(): JSX.Element {
 
                     {/* Enhanced Stats with Progress Bars */}
                     <div className="grid grid-cols-3 gap-2">
-                      <div className="bg-gradient-to-br from-purple-500/20 to-transparent rounded-lg p-2 text-center relative overflow-hidden">
+                      <div className="bg-gradient-to-br from-primary/20 to-transparent rounded-lg p-2 text-center relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent shimmer"></div>
                         <Star className="w-4 h-4 text-yellow-400 mx-auto mb-1 animate-spin-slow" />
                         <div className="text-lg font-bold text-purple-300 counter" data-target="2500">0</div>
                         <div className="text-xs text-gray-400">Stars</div>
                         <div className="w-full bg-gray-700 rounded-full h-1 mt-1">
-                          <div className="bg-gradient-to-r from-purple-500 to-yellow-400 h-1 rounded-full animate-progressBar" style={{ width: '0%', animationDelay: '0.5s' }}></div>
+                          <div className="bg-gradient-to-r from-primary to-yellow-400 h-1 rounded-full animate-progressBar" style={{ width: '0%', animationDelay: '0.5s' }}></div>
                         </div>
                       </div>
-                      <div className="bg-gradient-to-br from-blue-500/20 to-transparent rounded-lg p-2 text-center relative overflow-hidden">
+                      <div className="bg-gradient-to-br from-secondary/20 to-transparent rounded-lg p-2 text-center relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent shimmer" style={{ animationDelay: '1s' }}></div>
                         <GitFork className="w-4 h-4 text-blue-400 mx-auto mb-1 animate-bounce" />
                         <div className="text-lg font-bold text-blue-300 counter" data-target="180">0</div>
                         <div className="text-xs text-gray-400">Forks</div>
                         <div className="w-full bg-gray-700 rounded-full h-1 mt-1">
-                          <div className="bg-gradient-to-r from-blue-500 to-cyan-400 h-1 rounded-full animate-progressBar" style={{ width: '0%', animationDelay: '1s' }}></div>
+                          <div className="bg-gradient-to-r from-secondary to-cyan-400 h-1 rounded-full animate-progressBar" style={{ width: '0%', animationDelay: '1s' }}></div>
                         </div>
                       </div>
                       <div className="bg-gradient-to-br from-green-500/20 to-transparent rounded-lg p-2 text-center relative overflow-hidden">
@@ -224,7 +224,7 @@ export default function LandingPage(): JSX.Element {
                         {[30, 50, 25, 70, 40, 60, 35, 55, 45, 65, 50, 75, 80, 45, 60].map((height, i) => (
                           <div
                             key={i}
-                            className="flex-1 bg-gradient-to-t from-purple-600/60 via-blue-500/60 to-cyan-400/60 rounded-t-sm cursor-pointer hover:from-purple-500 hover:via-blue-400 hover:to-cyan-300 transition-all duration-300 relative group"
+                            className="flex-1 bg-gradient-to-t from-purple-600/60 via-blue-500/60 to-cyan-400/60 rounded-t-sm cursor-pointer hover:from-primary hover:via-blue-400 hover:to-cyan-300 transition-all duration-300 relative group"
                             style={{ 
                               height: `${height}%`,
                               animation: `graphBar 2s ease-out ${i * 0.1}s both`,
@@ -303,11 +303,11 @@ export default function LandingPage(): JSX.Element {
                style={{ transformStyle: 'preserve-3d', animation: 'floatAndTilt 8s ease-in-out infinite reverse' }}>
             <div className="relative cursor-pointer perspective-1000" style={{ transform: 'rotateY(15deg) rotateX(8deg)', transformStyle: 'preserve-3d' }}>
               <div className="absolute -inset-3 bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600 rounded-3xl blur-2xl opacity-40 group-hover:opacity-80 group-hover:animate-pulse transition-all duration-700"></div>
-              <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-8 shadow-2xl relative border border-gray-700/50 group-hover:border-blue-500/50 transition-all duration-500">
+              <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-8 shadow-2xl relative border border-gray-700/50 group-hover:border-secondary/50 transition-all duration-500">
                 {/* Animated Profile Section */}
                 <div className="flex items-center space-x-4 mb-6">
                   <div className="relative">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 p-1 animate-spin-slow">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-r from-primary to-secondary p-1 animate-spin-slow">
                       <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center">
                         <span className="text-xl">�‍💻</span>
                       </div>
@@ -331,7 +331,7 @@ export default function LandingPage(): JSX.Element {
                     <div className="flex items-center space-x-1">
                       <div className="w-2 h-2 bg-gray-700 rounded-sm"></div>
                       <div className="w-2 h-2 bg-purple-800 rounded-sm"></div>
-                      <div className="w-2 h-2 bg-purple-600 rounded-sm"></div>
+                      <div className="w-2 h-2 bg-primary rounded-sm"></div>
                       <div className="w-2 h-2 bg-purple-400 rounded-sm"></div>
                       <div className="w-2 h-2 bg-purple-300 rounded-sm"></div>
                     </div>
@@ -339,8 +339,8 @@ export default function LandingPage(): JSX.Element {
                   <div className="grid grid-cols-12 gap-1">
                     {Array(84).fill(0).map((_, i) => {
                       const intensity = Math.floor(Math.random() * 5);
-                      const colors = ['bg-gray-700', 'bg-purple-800', 'bg-purple-600', 'bg-purple-400', 'bg-purple-300'];
-                      const hoverColors = ['hover:bg-gray-500', 'hover:bg-purple-600', 'hover:bg-purple-400', 'hover:bg-purple-200', 'hover:bg-purple-100'];
+                      const colors = ['bg-gray-700', 'bg-purple-800', 'bg-primary', 'bg-purple-400', 'bg-purple-300'];
+                      const hoverColors = ['hover:bg-gray-500', 'hover:bg-primary', 'hover:bg-purple-400', 'hover:bg-purple-200', 'hover:bg-purple-100'];
                       return (
                         <div
                           key={i}
@@ -479,7 +479,7 @@ export default function LandingPage(): JSX.Element {
           </div>
 
           {/* Connecting line */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-1 bg-gradient-to-r from-purple-500/40 via-blue-500/60 to-purple-500/40 blur-sm"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-1 bg-gradient-to-r from-primary/40 via-blue-500/60 to-primary/40 blur-sm"></div>
         </div>
       </div>
 

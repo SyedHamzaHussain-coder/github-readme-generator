@@ -592,7 +592,7 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
                         href={href} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 underline inline-flex items-center gap-1"
+                        className="text-secondary hover:text-blue-800 underline inline-flex items-center gap-1"
                       >
                         {children}
                         <ExternalLink className="w-3 h-3" />

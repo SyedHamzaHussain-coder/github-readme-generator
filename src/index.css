@@ -2,3 +2,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom Color Theme: Olive & Lime Green */
+@layer base {
+  :root {
+    --color-primary: #556B2F;
+    --color-primary-dark: #3d4d21;
+    --color-primary-light: #6d8a3a;
+    --color-secondary: #8FA31E;
+    --color-secondary-dark: #6f8015;
+    --color-secondary-light: #a8bc35;
+    --color-accent: #C6D870;
+    --color-accent-dark: #b4c65a;
+    --color-accent-light: #d5e490;
+  }
+}
+
+/* Custom scrollbar styling with theme colors */
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-secondary);
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+  }
+
+  /* Selection color */
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-primary-dark);
+  }
+}
