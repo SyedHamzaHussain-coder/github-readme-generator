@@ -89,14 +89,14 @@ export const DebugPage: React.FC = () => {
         <div className="space-x-4">
           <button
             onClick={handleDebugOAuth}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+            className="bg-secondary hover:bg-secondary-dark text-white px-4 py-2 rounded"
           >
             Debug OAuth URL Generation
           </button>
           
           <button
             onClick={testGitHubClientId}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+            className="bg-accent-dark hover:bg-accent-dark text-white px-4 py-2 rounded"
           >
             Test GitHub Client ID
           </button>
@@ -138,20 +138,21 @@ export const DebugPage: React.FC = () => {
           </div>
         </div>
         
-        <div className="bg-blue-900 p-4 rounded">
+        <div className="bg-primary/20 p-4 rounded">
           <h2 className="text-lg font-semibold mb-2">📋 Update Your GitHub OAuth App</h2>
-          <p className="text-sm text-blue-200 mb-2">
+          <p className="text-sm text-accent mb-2">
             Go to: <a href="https://github.com/settings/applications" target="_blank" rel="noopener noreferrer" className="underline">
               https://github.com/settings/applications
             </a>
           </p>
-          <p className="text-sm text-blue-200">Find your OAuth app and update:</p>
+          <p className="text-sm text-accent">Find your OAuth app and update:</p>
           <div className="mt-2 p-2 bg-black rounded">
-            <p className="text-green-400">✅ Homepage URL: {config.baseUrl}</p>
-            <p className="text-green-400">✅ Callback URL: {config.baseUrl}/auth/callback</p>
+            <p className="text-accent">✅ Homepage URL: {config.baseUrl}</p>
+            <p className="text-accent">✅ Callback URL: {config.baseUrl}/auth/callback</p>
           </div>
         </div>
       </div>
     </div>
   );
 };
+

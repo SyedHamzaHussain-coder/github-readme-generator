@@ -117,9 +117,9 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
           />
           <div className="flex-1">
             <h1 className="text-3xl font-bold">{githubData.name || githubData.username}</h1>
-            <p className="text-purple-100 text-lg">@{githubData.username}</p>
+            <p className="text-accent-light text-lg">@{githubData.username}</p>
             {githubData.bio && (
-              <p className="text-purple-50 mt-2 max-w-2xl">{githubData.bio}</p>
+              <p className="text-accent-light mt-2 max-w-2xl">{githubData.bio}</p>
             )}
           </div>
           {showActions && (
@@ -150,7 +150,7 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
       <div className="px-6 py-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
           <div className="text-center">
-            <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mx-auto mb-2">
+            <div className="flex items-center justify-center w-12 h-12 bg-secondary/20 rounded-full mx-auto mb-2">
               <Star className="w-6 h-6 text-secondary" />
             </div>
             <div className="text-2xl font-bold text-gray-800">{repositoryCount || githubData.public_repos}</div>
@@ -158,7 +158,7 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
           </div>
           
           <div className="text-center">
-            <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mx-auto mb-2">
+            <div className="flex items-center justify-center w-12 h-12 bg-accent/20 rounded-full mx-auto mb-2">
               <Users className="w-6 h-6 text-accent-dark" />
             </div>
             <div className="text-2xl font-bold text-gray-800">{githubData.followers}</div>
@@ -166,7 +166,7 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
           </div>
           
           <div className="text-center">
-            <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-full mx-auto mb-2">
+            <div className="flex items-center justify-center w-12 h-12 bg-primary/20 rounded-full mx-auto mb-2">
               <GitBranch className="w-6 h-6 text-primary" />
             </div>
             <div className="text-2xl font-bold text-gray-800">{githubData.following}</div>
@@ -207,7 +207,7 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
                 href={githubData.blog.startsWith('http') ? githubData.blog : `https://${githubData.blog}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-secondary hover:text-blue-800 hover:underline"
+                className="text-secondary hover:text-secondary-dark hover:underline"
               >
                 {githubData.blog}
               </a>
@@ -221,7 +221,7 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
                 href={`https://twitter.com/${githubData.twitter_username}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-secondary hover:text-blue-800 hover:underline"
+                className="text-secondary hover:text-secondary-dark hover:underline"
               >
                 @{githubData.twitter_username}
               </a>
@@ -233,7 +233,7 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
               <Mail className="w-4 h-4 mr-3 text-gray-400" />
               <a 
                 href={`mailto:${githubData.email}`}
-                className="text-secondary hover:text-blue-800 hover:underline"
+                className="text-secondary hover:text-secondary-dark hover:underline"
               >
                 {githubData.email}
               </a>
@@ -253,3 +253,4 @@ const GitHubProfile: React.FC<GitHubProfileProps> = ({
 };
 
 export default GitHubProfile;
+

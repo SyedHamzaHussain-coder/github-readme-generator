@@ -526,7 +526,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ repositoryAnaly
             </div>
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Quality Score</h4>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-accent-dark">
                 {repositoryAnalysis.quality.overall}/10
               </div>
               <p className="text-sm text-gray-600">
@@ -608,8 +608,8 @@ interface MetricCardProps {
 const MetricCard: React.FC<MetricCardProps> = ({ title, value, subtitle, color }) => {
   const colorClasses = {
     blue: 'text-secondary bg-accent-light border-accent',
-    green: 'text-green-600 bg-green-50 border-green-200',
-    purple: 'text-primary bg-purple-50 border-purple-200',
+    green: 'text-accent-dark bg-accent/10 border-accent/30',
+    purple: 'text-primary bg-primary/10 border-primary/30',
     red: 'text-red-600 bg-red-50 border-red-200'
   };
 
@@ -625,4 +625,6 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, subtitle, color }
 };
 
 export default EnhancedReadmeBuilder;
+
+
 

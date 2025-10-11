@@ -295,8 +295,8 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     return (
       <div className="text-center max-w-2xl mx-auto">
         <div className="relative mb-12">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-secondary rounded-full blur-3xl opacity-20 animate-pulse"></div>
-          <div className="relative bg-gradient-to-r from-green-600 to-secondary text-white p-8 rounded-3xl shadow-2xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-accent to-secondary rounded-full blur-3xl opacity-20 animate-pulse"></div>
+          <div className="relative bg-gradient-to-r from-accent to-secondary text-white p-8 rounded-3xl shadow-2xl">
             <div className="flex items-center justify-center mb-4">
               <img 
                 src={userInfo.avatar_url} 
@@ -305,7 +305,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
               />
             </div>
             <h2 className="text-3xl font-bold mb-2">Welcome back, {userInfo.name || userInfo.username}!</h2>
-            <p className="text-green-100 mb-6">
+            <p className="text-accent-light mb-6">
               Your GitHub account is connected. Ready to generate amazing READMEs?
             </p>
             
@@ -317,7 +317,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
               >
                 {isGenerating ? (
                   <div className="flex items-center space-x-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-green-600 border-t-transparent"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-accent border-t-transparent"></div>
                     <span>Loading...</span>
                   </div>
                 ) : (
@@ -330,7 +330,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
               
               <button
                 onClick={handleUseDifferentAccount}
-                className="text-green-100 hover:text-white transition-colors underline"
+                className="text-accent-light hover:text-white transition-colors underline"
               >
                 Use different account
               </button>
@@ -348,26 +348,26 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
         <div className="relative bg-gradient-to-r from-primary to-secondary text-white p-8 rounded-3xl shadow-2xl">
           <Github className="w-16 h-16 mx-auto mb-6" />
           <h2 className="text-3xl font-bold mb-4">Connect Your GitHub Account</h2>
-          <p className="text-purple-100 mb-8">
+          <p className="text-accent-light mb-8">
             We'll analyze your repositories and profile to create amazing README files using AI
           </p>
           
           {/* Benefits Section */}
           <div className="grid md:grid-cols-3 gap-4 mb-8">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <Shield className="w-8 h-8 mx-auto mb-2 text-purple-200" />
+              <Shield className="w-8 h-8 mx-auto mb-2 text-accent" />
               <h3 className="font-semibold mb-1">Secure</h3>
-              <p className="text-sm text-purple-100">OAuth 2.0 authentication</p>
+              <p className="text-sm text-accent-light">OAuth 2.0 authentication</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <Users className="w-8 h-8 mx-auto mb-2 text-purple-200" />
+              <Users className="w-8 h-8 mx-auto mb-2 text-accent" />
               <h3 className="font-semibold mb-1">Trusted</h3>
-              <p className="text-sm text-purple-100">Used by 10,000+ developers</p>
+              <p className="text-sm text-accent-light">Used by 10,000+ developers</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <BookOpen className="w-8 h-8 mx-auto mb-2 text-purple-200" />
+              <BookOpen className="w-8 h-8 mx-auto mb-2 text-accent" />
               <h3 className="font-semibold mb-1">Smart</h3>
-              <p className="text-sm text-purple-100">AI-powered analysis</p>
+              <p className="text-sm text-accent-light">AI-powered analysis</p>
             </div>
           </div>
 
@@ -392,7 +392,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
           </div>
           
           {/* Permissions info */}
-          <div className="mt-6 flex items-start justify-center text-purple-100 text-sm">
+          <div className="mt-6 flex items-start justify-center text-accent-light text-sm">
             <AlertCircle className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
             <div className="text-left">
               <p className="font-medium mb-1">We'll request permission to:</p>
@@ -408,4 +408,5 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     </div>
   );
 };
+
 

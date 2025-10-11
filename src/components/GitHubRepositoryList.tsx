@@ -46,7 +46,7 @@ const GitHubRepositoryList: React.FC<GitHubRepositoryListProps> = ({
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
         <span className="ml-3 text-gray-600">Loading repositories...</span>
       </div>
     );
@@ -76,7 +76,7 @@ const GitHubRepositoryList: React.FC<GitHubRepositoryListProps> = ({
           <select 
             value={sortBy} 
             onChange={(e) => handleSortChange(e.target.value as typeof sortBy)}
-            className="border rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-secondary"
           >
             <option value="updated">Last Updated</option>
             <option value="created">Created</option>
@@ -91,7 +91,7 @@ const GitHubRepositoryList: React.FC<GitHubRepositoryListProps> = ({
           <select 
             value={direction} 
             onChange={(e) => handleDirectionChange(e.target.value as typeof direction)}
-            className="border rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-secondary"
           >
             <option value="desc">Descending</option>
             <option value="asc">Ascending</option>
@@ -103,7 +103,7 @@ const GitHubRepositoryList: React.FC<GitHubRepositoryListProps> = ({
           <select 
             value={filter} 
             onChange={(e) => handleFilterChange(e.target.value as typeof filter)}
-            className="border rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-secondary"
           >
             <option value="all">All</option>
             <option value="owner">Owned</option>
@@ -114,7 +114,7 @@ const GitHubRepositoryList: React.FC<GitHubRepositoryListProps> = ({
 
         <button 
           onClick={() => refetch()}
-          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+          className="px-3 py-1 bg-secondary text-white text-sm rounded hover:bg-secondary-dark transition-colors"
         >
           Refresh
         </button>
@@ -127,7 +127,7 @@ const GitHubRepositoryList: React.FC<GitHubRepositoryListProps> = ({
             key={repo.id} 
             className={`border rounded-lg p-6 hover:shadow-md transition-all cursor-pointer ${
               showSelection && selectedRepository === repo.name 
-                ? 'border-blue-500 bg-blue-50' 
+                ? 'border-secondary bg-secondary/10' 
                 : 'border-gray-200 hover:border-gray-300'
             }`}
             onClick={() => onRepositorySelect && onRepositorySelect(repo)}
@@ -135,13 +135,13 @@ const GitHubRepositoryList: React.FC<GitHubRepositoryListProps> = ({
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-2">
-                  <h3 className="text-xl font-semibold text-blue-600 hover:text-blue-800">
+                  <h3 className="text-xl font-semibold text-secondary hover:text-secondary-dark">
                     <a href={repo.html_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
                       {repo.name}
                     </a>
                   </h3>
                   {showSelection && selectedRepository === repo.name && (
-                    <span className="text-blue-600">✓</span>
+                    <span className="text-secondary">✓</span>
                   )}
                 </div>
                 
@@ -152,7 +152,7 @@ const GitHubRepositoryList: React.FC<GitHubRepositoryListProps> = ({
                 <div className="flex items-center space-x-6 mt-4 text-sm text-gray-500">
                   {repo.language && (
                     <span className="flex items-center">
-                      <span className="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
+                      <span className="w-3 h-3 rounded-full bg-secondary/100 mr-2"></span>
                       {repo.language}
                     </span>
                   )}
@@ -173,7 +173,7 @@ const GitHubRepositoryList: React.FC<GitHubRepositoryListProps> = ({
                 {repo.topics && repo.topics.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-3">
                     {repo.topics.map(topic => (
-                      <span key={topic} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                      <span key={topic} className="px-2 py-1 bg-secondary/20 text-secondary-dark text-xs rounded-full">
                         {topic}
                       </span>
                     ))}
@@ -221,3 +221,5 @@ const GitHubRepositoryList: React.FC<GitHubRepositoryListProps> = ({
 };
 
 export default GitHubRepositoryList;
+
+

@@ -16,7 +16,7 @@ export default function ExamplesPage(): JSX.Element {
       title: "Simple Portfolio Website",
       description: "A clean, minimal README for personal portfolio projects",
       difficulty: "Basic",
-      color: "green",
+      color: "accent",
       tags: ["HTML", "CSS", "JavaScript"],
       stars: "127",
       forks: "34",
@@ -60,7 +60,7 @@ MIT License - see [LICENSE](LICENSE) file for details.`
       title: "React Task Manager",
       description: "Feature-rich task management app with modern React patterns",
       difficulty: "Intermediate",
-      color: "blue",
+      color: "secondary",
       tags: ["React", "TypeScript", "Tailwind"],
       stars: "892",
       forks: "156",
@@ -135,7 +135,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
       title: "Enterprise Microservices Platform",
       description: "Production-ready microservices architecture with full DevOps pipeline",
       difficulty: "Advanced",
-      color: "yellow",
+      color: "primary",
       tags: ["Docker", "Kubernetes", "Go", "PostgreSQL"],
       stars: "2.1k",
       forks: "487",
@@ -294,19 +294,19 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
   ];
 
   const difficultyColors = {
-    Basic: "text-green-400 bg-green-500/20 border-green-500/30",
-    Intermediate: "text-blue-400 bg-blue-500/20 border-blue-500/30",
-    Advanced: "text-yellow-400 bg-yellow-500/20 border-yellow-500/30"
+    Basic: "text-accent bg-accent/20 border-accent/30",
+    Intermediate: "text-secondary bg-secondary/20 border-secondary/30",
+    Advanced: "text-primary-light bg-primary/20 border-primary/30"
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-primary to-slate-900 text-white">
       {/* Header */}
       <div className="relative z-10 px-6 py-8">
         <div className="max-w-7xl mx-auto">
           <button 
             onClick={() => navigate('/')}
-            className="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors mb-6"
+            className="inline-flex items-center text-secondary hover:text-accent transition-colors mb-6"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Home
@@ -315,15 +315,15 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
           <div className="text-center mb-16">
             <h1 className="text-4xl lg:text-5xl font-bold mb-4">
               README
-              <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"> Examples</span>
+              <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent"> Examples</span>
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
               Explore real-world README examples from basic to enterprise-level projects. 
               See how professional documentation looks and get inspired for your own projects.
             </p>
             <div className="flex justify-center">
-              <div className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full px-6 py-2 border border-purple-500/30">
-                <span className="text-sm text-purple-300 font-medium">
+              <div className="bg-gradient-to-r from-secondary/20 to-accent/20 rounded-full px-6 py-2 border border-secondary/30">
+                <span className="text-sm text-accent font-medium">
                   ✨ Preview-only examples - This is how your README will look
                 </span>
               </div>
@@ -339,7 +339,7 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
             {examples.map((example, index) => (
               <div 
                 key={example.id}
-                className="group relative bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-xl rounded-3xl border border-gray-700/50 overflow-hidden hover:border-purple-500/50 transition-all duration-700 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/10 cursor-pointer"
+                className="group relative bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-xl rounded-3xl border border-gray-700/50 overflow-hidden hover:border-secondary/50 transition-all duration-700 hover:scale-[1.02] hover:shadow-2xl hover:shadow-secondary/10 cursor-pointer"
                 style={{
                   transform: `perspective(1000px) rotateX(${index * 2}deg) rotateY(${index * 1}deg)`,
                   transformStyle: 'preserve-3d'
@@ -350,7 +350,7 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
                 <div className="p-6 border-b border-gray-700/30">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <Github className="w-6 h-6 text-purple-400" />
+                      <Github className="w-6 h-6 text-secondary" />
                       <span className={`px-3 py-1 rounded-full text-xs font-medium border ${difficultyColors[example.difficulty as keyof typeof difficultyColors]}`}>
                         {example.difficulty}
                       </span>
@@ -367,7 +367,7 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-accent transition-colors">
                     {example.title}
                   </h3>
                   <p className="text-gray-300 text-sm mb-4 line-clamp-2">{example.description}</p>
@@ -389,7 +389,7 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
                 {/* README Preview */}
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Code className="w-4 h-4 text-blue-400" />
+                    <Code className="w-4 h-4 text-accent" />
                     <span className="text-sm font-medium text-white">README Preview</span>
                   </div>
                   
@@ -462,13 +462,13 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
                 </div>
 
                 {/* Hover Effect Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/0 to-blue-600/0 group-hover:from-purple-600/5 group-hover:to-blue-600/5 transition-all duration-700 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/0 to-secondary/0 group-hover:from-primary/5 group-hover:to-secondary/5 transition-all duration-700 pointer-events-none"></div>
               </div>
             ))}
           </div>
 
           {/* Call to Action */}
-          <div className="text-center mt-16 p-8 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-2xl border border-purple-500/20">
+          <div className="text-center mt-16 p-8 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-2xl border border-secondary/20">
             <h3 className="text-2xl font-bold text-white mb-4">Ready to Create Your Own?</h3>
             <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
               Generate professional READMEs tailored to your project in seconds. 
@@ -476,7 +476,7 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
             </p>
             <button 
               onClick={() => navigate('/connect')}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 inline-flex items-center"
+              className="bg-gradient-to-r from-primary to-secondary hover:from-primary-dark hover:to-secondary-dark px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 inline-flex items-center"
             >
               <Sparkles className="w-5 h-5 mr-2" />
               Start Generating Now
@@ -498,9 +498,9 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
                   <h3 className="text-lg font-semibold text-gray-900">{selectedExample.title}</h3>
                   <div className="flex items-center gap-4 text-sm text-gray-600">
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      selectedExample.difficulty === 'Basic' ? 'bg-green-100 text-green-700' :
-                      selectedExample.difficulty === 'Intermediate' ? 'bg-blue-100 text-blue-700' :
-                      'bg-yellow-100 text-yellow-700'
+                      selectedExample.difficulty === 'Basic' ? 'bg-accent-light text-primary-dark' :
+                      selectedExample.difficulty === 'Intermediate' ? 'bg-secondary-light text-primary-dark' :
+                      'bg-primary-light text-white'
                     }`}>
                       {selectedExample.difficulty}
                     </span>
@@ -592,7 +592,7 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
                         href={href} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-secondary hover:text-blue-800 underline inline-flex items-center gap-1"
+                        className="text-secondary hover:text-secondary-dark underline inline-flex items-center gap-1"
                       >
                         {children}
                         <ExternalLink className="w-3 h-3" />
@@ -629,7 +629,7 @@ Licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
               </div>
               <button 
                 onClick={() => navigate('/connect')}
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 px-6 py-2 rounded-lg font-semibold text-white transition-all duration-300 transform hover:scale-105 inline-flex items-center"
+                className="bg-gradient-to-r from-primary to-secondary hover:from-primary-light hover:to-secondary-light px-6 py-2 rounded-lg font-semibold text-white transition-all duration-300 transform hover:scale-105 inline-flex items-center"
               >
                 <Sparkles className="w-4 h-4 mr-2" />
                 Create Similar

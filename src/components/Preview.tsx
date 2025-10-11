@@ -30,14 +30,14 @@ export const Preview: React.FC<PreviewProps> = ({
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-accent rounded-full"></div>
           </div>
         </div>
         <div className="h-[calc(100vh-20rem)] overflow-auto">
           <textarea
             value={markdown}
             onChange={(e) => onEdit(e.target.value)}
-            className="w-full h-full resize-none border-none outline-none font-mono text-sm p-6 bg-gray-900 text-green-400"
+            className="w-full h-full resize-none border-none outline-none font-mono text-sm p-6 bg-gray-900 text-accent"
             placeholder="Edit your README here..."
             style={{ 
               fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
@@ -83,3 +83,4 @@ export const Preview: React.FC<PreviewProps> = ({
     </div>
   );
 };
+

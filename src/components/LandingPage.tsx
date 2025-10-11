@@ -166,8 +166,8 @@ export default function LandingPage(): JSX.Element {
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs text-gray-400">Recent Activity</span>
                         <div className="flex items-center space-x-1">
-                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                          <span className="text-xs text-green-400">Live</span>
+                          <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+                          <span className="text-xs text-accent-dark">Live</span>
                         </div>
                       </div>
                       <div className="space-y-1">
@@ -198,21 +198,21 @@ export default function LandingPage(): JSX.Element {
                         </div>
                       </div>
                       <div className="bg-gradient-to-br from-secondary/20 to-transparent rounded-lg p-2 text-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent shimmer" style={{ animationDelay: '1s' }}></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-secondary/10 to-transparent shimmer" style={{ animationDelay: '1s' }}></div>
                         <GitFork className="w-4 h-4 text-accent mx-auto mb-1 animate-bounce" />
-                        <div className="text-lg font-bold text-blue-300 counter" data-target="180">0</div>
+                        <div className="text-lg font-bold text-accent counter" data-target="180">0</div>
                         <div className="text-xs text-gray-400">Forks</div>
                         <div className="w-full bg-gray-700 rounded-full h-1 mt-1">
-                          <div className="bg-gradient-to-r from-secondary to-cyan-400 h-1 rounded-full animate-progressBar" style={{ width: '0%', animationDelay: '1s' }}></div>
+                          <div className="bg-gradient-to-r from-secondary to-accent h-1 rounded-full animate-progressBar" style={{ width: '0%', animationDelay: '1s' }}></div>
                         </div>
                       </div>
-                      <div className="bg-gradient-to-br from-green-500/20 to-transparent rounded-lg p-2 text-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-green-500/10 to-transparent shimmer" style={{ animationDelay: '2s' }}></div>
-                        <Activity className="w-4 h-4 text-green-400 mx-auto mb-1 animate-pulse" />
-                        <div className="text-lg font-bold text-green-300">Active</div>
+                      <div className="bg-gradient-to-br from-accent/20 to-transparent rounded-lg p-2 text-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/10 to-transparent shimmer" style={{ animationDelay: '2s' }}></div>
+                        <Activity className="w-4 h-4 text-accent-dark mx-auto mb-1 animate-pulse" />
+                        <div className="text-lg font-bold text-accent">Active</div>
                         <div className="text-xs text-gray-400">Status</div>
                         <div className="flex justify-center mt-1">
-                          <div className="w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+                          <div className="w-3 h-3 bg-accent rounded-full animate-ping"></div>
                         </div>
                       </div>
                     </div>
@@ -224,7 +224,7 @@ export default function LandingPage(): JSX.Element {
                         {[30, 50, 25, 70, 40, 60, 35, 55, 45, 65, 50, 75, 80, 45, 60].map((height, i) => (
                           <div
                             key={i}
-                            className="flex-1 bg-gradient-to-t from-purple-600/60 via-blue-500/60 to-cyan-400/60 rounded-t-sm cursor-pointer hover:from-primary hover:via-blue-400 hover:to-cyan-300 transition-all duration-300 relative group"
+                            className="flex-1 bg-gradient-to-t from-primary/60 via-secondary/60 to-accent/60 rounded-t-sm cursor-pointer hover:from-primary hover:via-secondary hover:to-accent-light transition-all duration-300 relative group"
                             style={{ 
                               height: `${height}%`,
                               animation: `graphBar 2s ease-out ${i * 0.1}s both`,
@@ -246,13 +246,13 @@ export default function LandingPage(): JSX.Element {
                       <div className="text-xs text-gray-400 mb-2">Languages</div>
                       <div className="space-y-2">
                         <div className="flex items-center space-x-2">
-                          <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-secondary rounded-full"></div>
                           <span className="text-xs text-gray-300 flex-1">TypeScript</span>
                           <span className="text-xs text-gray-400">65%</span>
                         </div>
                         <div className="w-full bg-gray-700 rounded-full h-1.5">
                           <div 
-                            className="bg-blue-500 h-1.5 rounded-full animate-progressBar" 
+                            className="bg-secondary h-1.5 rounded-full animate-progressBar" 
                             style={{ 
                               width: '0%', 
                               animationDelay: '1s',
@@ -261,13 +261,13 @@ export default function LandingPage(): JSX.Element {
                           ></div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-accent rounded-full"></div>
                           <span className="text-xs text-gray-300 flex-1">JavaScript</span>
                           <span className="text-xs text-gray-400">25%</span>
                         </div>
                         <div className="w-full bg-gray-700 rounded-full h-1.5">
                           <div 
-                            className="bg-yellow-500 h-1.5 rounded-full animate-progressBar" 
+                            className="bg-accent h-1.5 rounded-full animate-progressBar" 
                             style={{ 
                               width: '0%', 
                               animationDelay: '1.5s',
@@ -276,13 +276,13 @@ export default function LandingPage(): JSX.Element {
                           ></div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-primary-light rounded-full"></div>
                           <span className="text-xs text-gray-300 flex-1">CSS</span>
                           <span className="text-xs text-gray-400">10%</span>
                         </div>
                         <div className="w-full bg-gray-700 rounded-full h-1.5">
                           <div 
-                            className="bg-red-500 h-1.5 rounded-full animate-progressBar" 
+                            className="bg-primary-light h-1.5 rounded-full animate-progressBar" 
                             style={{ 
                               width: '0%', 
                               animationDelay: '2s',
@@ -302,7 +302,7 @@ export default function LandingPage(): JSX.Element {
           <div className="absolute right-8 top-16 transform hover:-translate-x-6 hover:scale-105 hover:-rotate-1 transition-all duration-700 z-30 w-[350px] group"
                style={{ transformStyle: 'preserve-3d', animation: 'floatAndTilt 8s ease-in-out infinite reverse' }}>
             <div className="relative cursor-pointer perspective-1000" style={{ transform: 'rotateY(15deg) rotateX(8deg)', transformStyle: 'preserve-3d' }}>
-              <div className="absolute -inset-3 bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600 rounded-3xl blur-2xl opacity-40 group-hover:opacity-80 group-hover:animate-pulse transition-all duration-700"></div>
+              <div className="absolute -inset-3 bg-gradient-to-r from-secondary via-accent to-primary rounded-3xl blur-2xl opacity-40 group-hover:opacity-80 group-hover:animate-pulse transition-all duration-700"></div>
               <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-8 shadow-2xl relative border border-gray-700/50 group-hover:border-secondary/50 transition-all duration-500">
                 {/* Animated Profile Section */}
                 <div className="flex items-center space-x-4 mb-6">
@@ -312,7 +312,7 @@ export default function LandingPage(): JSX.Element {
                         <span className="text-xl">�‍💻</span>
                       </div>
                     </div>
-                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-gray-900 flex items-center justify-center">
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-accent rounded-full border-2 border-gray-900 flex items-center justify-center">
                       <span className="text-xs">✓</span>
                     </div>
                   </div>
@@ -330,17 +330,17 @@ export default function LandingPage(): JSX.Element {
                     <span>Contribution Activity</span>
                     <div className="flex items-center space-x-1">
                       <div className="w-2 h-2 bg-gray-700 rounded-sm"></div>
-                      <div className="w-2 h-2 bg-purple-800 rounded-sm"></div>
+                      <div className="w-2 h-2 bg-primary-dark rounded-sm"></div>
                       <div className="w-2 h-2 bg-primary rounded-sm"></div>
-                      <div className="w-2 h-2 bg-purple-400 rounded-sm"></div>
-                      <div className="w-2 h-2 bg-purple-300 rounded-sm"></div>
+                      <div className="w-2 h-2 bg-secondary rounded-sm"></div>
+                      <div className="w-2 h-2 bg-accent rounded-sm"></div>
                     </div>
                   </div>
                   <div className="grid grid-cols-12 gap-1">
                     {Array(84).fill(0).map((_, i) => {
                       const intensity = Math.floor(Math.random() * 5);
-                      const colors = ['bg-gray-700', 'bg-purple-800', 'bg-primary', 'bg-purple-400', 'bg-purple-300'];
-                      const hoverColors = ['hover:bg-gray-500', 'hover:bg-primary', 'hover:bg-purple-400', 'hover:bg-purple-200', 'hover:bg-purple-100'];
+                      const colors = ['bg-gray-700', 'bg-primary-dark', 'bg-primary', 'bg-secondary', 'bg-accent'];
+                      const hoverColors = ['hover:bg-gray-500', 'hover:bg-primary', 'hover:bg-secondary', 'hover:bg-accent', 'hover:bg-accent-light'];
                       return (
                         <div
                           key={i}
@@ -367,7 +367,7 @@ export default function LandingPage(): JSX.Element {
 
                 {/* Enhanced Stats with Real-time Animation */}
                 <div className="grid grid-cols-3 gap-2 mb-4">
-                  <div className="bg-purple-500/20 rounded-lg p-2 text-center relative overflow-hidden group">
+                  <div className="bg-secondary/20 rounded-lg p-2 text-center relative overflow-hidden group">
                     <div className="relative z-10">
                       <Coffee className="w-4 h-4 text-secondary mx-auto mb-1 animate-bounce" style={{ animationDuration: '2s' }} />
                       <div className="text-sm font-bold text-white animate-counter">1,247</div>
@@ -376,7 +376,7 @@ export default function LandingPage(): JSX.Element {
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
                   </div>
-                  <div className="bg-blue-500/20 rounded-lg p-2 text-center relative overflow-hidden group">
+                  <div className="bg-primary/20 rounded-lg p-2 text-center relative overflow-hidden group">
                     <div className="relative z-10">
                       <Layers className="w-4 h-4 text-accent mx-auto mb-1 animate-spin" style={{ animationDuration: '4s' }} />
                       <div className="text-sm font-bold text-white animate-counter">28</div>
@@ -385,12 +385,12 @@ export default function LandingPage(): JSX.Element {
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" style={{ animationDelay: '1s' }}></div>
                   </div>
-                  <div className="bg-green-500/20 rounded-lg p-2 text-center relative overflow-hidden group">
+                  <div className="bg-accent/20 rounded-lg p-2 text-center relative overflow-hidden group">
                     <div className="relative z-10">
-                      <Calendar className="w-4 h-4 text-green-400 mx-auto mb-1 animate-pulse" />
+                      <Calendar className="w-4 h-4 text-accent-dark mx-auto mb-1 animate-pulse" />
                       <div className="text-sm font-bold text-white animate-counter">143</div>
                       <div className="text-xs text-gray-400">Streak</div>
-                      <div className="text-xs text-green-400 mt-1">🔥 active</div>
+                      <div className="text-xs text-accent-dark mt-1">🔥 active</div>
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" style={{ animationDelay: '2s' }}></div>
                   </div>
@@ -410,7 +410,7 @@ export default function LandingPage(): JSX.Element {
                       </div>
                       <div className="w-full bg-gray-700 rounded-full h-2">
                         <div 
-                          className="bg-gradient-to-r from-purple-600 to-purple-400 h-2 rounded-full animate-progressBar" 
+                          className="bg-gradient-to-r from-secondary to-accent h-2 rounded-full animate-progressBar" 
                           style={{ 
                             width: '0%', 
                             animationDelay: '0.5s',
@@ -426,7 +426,7 @@ export default function LandingPage(): JSX.Element {
                       </div>
                       <div className="w-full bg-gray-700 rounded-full h-2">
                         <div 
-                          className="bg-gradient-to-r from-blue-600 to-accent h-2 rounded-full animate-progressBar" 
+                          className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full animate-progressBar" 
                           style={{ 
                             width: '0%', 
                             animationDelay: '1s',
@@ -438,11 +438,11 @@ export default function LandingPage(): JSX.Element {
                     <div>
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-gray-300">UI/UX Design</span>
-                        <span className="text-green-400">78%</span>
+                        <span className="text-accent-dark">78%</span>
                       </div>
                       <div className="w-full bg-gray-700 rounded-full h-2">
                         <div 
-                          className="bg-gradient-to-r from-green-600 to-green-400 h-2 rounded-full animate-progressBar" 
+                          className="bg-gradient-to-r from-accent to-accent-light h-2 rounded-full animate-progressBar" 
                           style={{ 
                             width: '0%', 
                             animationDelay: '1.5s',
@@ -458,8 +458,8 @@ export default function LandingPage(): JSX.Element {
                 <div className="bg-gray-800/30 rounded-lg p-3 border border-gray-600/30">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                      <span className="text-xs text-green-400">Online</span>
+                      <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+                      <span className="text-xs text-accent-dark">Online</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Star className="w-3 h-3 text-yellow-400 animate-spin" style={{ animationDuration: '3s' }} />
@@ -479,7 +479,7 @@ export default function LandingPage(): JSX.Element {
           </div>
 
           {/* Connecting line */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-1 bg-gradient-to-r from-primary/40 via-blue-500/60 to-primary/40 blur-sm"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-1 bg-gradient-to-r from-primary/40 via-secondary/60 to-primary/40 blur-sm"></div>
         </div>
       </div>
 

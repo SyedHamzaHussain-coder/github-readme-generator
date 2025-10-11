@@ -309,13 +309,13 @@ export const VisualBuilder: React.FC<VisualBuilderProps> = ({
           <div className="bg-white rounded-lg shadow-sm p-4">
             <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
             <div className="space-y-2">
-              <button className="w-full p-2 text-sm bg-accent-light text-secondary-dark rounded-lg hover:bg-blue-100 transition-colors">
+              <button className="w-full p-2 text-sm bg-accent-light text-secondary-dark rounded-lg hover:bg-secondary/30 transition-colors">
                 🤖 AI Enhance
               </button>
-              <button className="w-full p-2 text-sm bg-accent-light text-accent-dark rounded-lg hover:bg-green-100 transition-colors">
+              <button className="w-full p-2 text-sm bg-accent-light text-accent-dark rounded-lg hover:bg-accent/30 transition-colors">
                 📊 Add Analytics
               </button>
-              <button className="w-full p-2 text-sm bg-primary-light text-primary-dark rounded-lg hover:bg-purple-100 transition-colors">
+              <button className="w-full p-2 text-sm bg-primary-light text-primary-dark rounded-lg hover:bg-primary/30 transition-colors">
                 🎨 Style Guide
               </button>
             </div>
@@ -420,7 +420,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({
         <textarea
           value={localContent}
           onChange={(e) => setLocalContent(e.target.value)}
-          className="w-full h-40 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full h-40 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
           placeholder="Enter markdown content..."
         />
       ) : (
@@ -479,5 +479,6 @@ const SectionLibraryModal: React.FC<SectionLibraryModalProps> = ({
 };
 
 export default VisualBuilder;
+
 
 

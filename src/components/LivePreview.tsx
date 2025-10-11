@@ -66,14 +66,14 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
               <li className="ml-4">{children}</li>
             ),
             blockquote: ({ children }) => (
-              <blockquote className="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 text-blue-800 italic my-4">
+              <blockquote className="border-l-4 border-secondary pl-4 py-2 bg-secondary/10 text-secondary-dark italic my-4">
                 {children}
               </blockquote>
             ),
             a: ({ href, children }) => (
               <a 
                 href={href} 
-                className="text-blue-600 hover:text-blue-800 underline"
+                className="text-secondary hover:text-secondary-dark underline"
                 target="_blank" 
                 rel="noopener noreferrer"
               >
@@ -112,3 +112,4 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
     </div>
   );
 };
+

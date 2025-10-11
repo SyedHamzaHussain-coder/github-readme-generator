@@ -460,7 +460,7 @@ const App = () => {
                         step === s
                           ? 'bg-secondary text-white'
                           : ['connect', 'type', 'template', 'generate', 'preview'].indexOf(step) > index
-                          ? 'bg-green-500 text-white'
+                          ? 'bg-accent text-white'
                           : 'bg-gray-200 text-gray-600'
                       }`}>
                         {index + 1}
@@ -468,7 +468,7 @@ const App = () => {
                       {index < 4 && (
                         <div className={`w-8 h-0.5 ${
                           ['connect', 'type', 'template', 'generate', 'preview'].indexOf(step) > index
-                            ? 'bg-green-500'
+                            ? 'bg-accent'
                             : 'bg-gray-200'
                         }`} />
                       )}
