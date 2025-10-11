@@ -17,7 +17,7 @@ export default function LandingPage(): JSX.Element {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white relative">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-primary to-slate-900 text-white relative">
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden">
         <canvas 
@@ -29,8 +29,8 @@ export default function LandingPage(): JSX.Element {
         <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/20"></div>
         
         {/* Floating geometric shapes */}
-        <div className="absolute top-20 left-20 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-20 left-20 w-64 h-64 bg-secondary/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
       {/* Navigation */}
@@ -41,7 +41,7 @@ export default function LandingPage(): JSX.Element {
           </div>
           <div>
             <h1 className="text-xl font-bold">README.ai</h1>
-            <p className="text-purple-300 text-sm">AI-Powered Documentation</p>
+            <p className="text-accent text-sm">AI-Powered Documentation</p>
           </div>
         </div>
       </nav>
@@ -50,14 +50,14 @@ export default function LandingPage(): JSX.Element {
       <div className="relative z-10 grid grid-cols-2 gap-16 max-w-8xl mx-auto px-8 min-h-[calc(100vh-80px)] py-8">
         {/* Left Side - Text Content */}
         <div className="flex flex-col justify-start pt-16 space-y-6 pr-8">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
-          <div className="inline-flex items-center bg-purple-500/20 rounded-full px-4 py-2 w-fit backdrop-blur-sm border border-primary/30">
-            <Zap className="w-4 h-4 mr-2 text-yellow-400" />
+          <div className="inline-flex items-center bg-secondary/20 rounded-full px-4 py-2 w-fit backdrop-blur-sm border border-primary/30">
+            <Zap className="w-4 h-4 mr-2 text-accent" />
             <span className="text-sm font-medium">AI-Powered • Lightning Fast • Professional</span>
           </div>
             
           <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
             Generate
-            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent"> Professional</span>
+            <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent"> Professional</span>
             <br />
             READMEs with AI
           </h1>
@@ -70,7 +70,7 @@ export default function LandingPage(): JSX.Element {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={() => navigate('/connect')}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center justify-center group"
+              className="bg-gradient-to-r from-primary to-secondary hover:from-primary-dark hover:to-secondary-dark px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center justify-center group"
             >
               <Github className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
               Get Started Free
@@ -79,7 +79,7 @@ export default function LandingPage(): JSX.Element {
             
             <button 
               onClick={() => navigate('/examples')}
-              className="border border-primary/50 hover:border-purple-400 px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:bg-purple-500/10 backdrop-blur-sm"
+              className="border border-secondary/50 hover:border-secondary px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:bg-secondary/10 backdrop-blur-sm"
             >
               View Examples
             </button>
@@ -89,21 +89,21 @@ export default function LandingPage(): JSX.Element {
           <div className="grid grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Code className="w-6 h-6 text-purple-400" />
+                <Code className="w-6 h-6 text-secondary" />
               </div>
               <div className="text-2xl font-bold text-white mb-1">50k+</div>
               <div className="text-sm text-gray-400">READMEs Generated</div>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-to-r from-secondary/20 to-indigo-500/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Users className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <Users className="w-6 h-6 text-accent" />
               </div>
               <div className="text-2xl font-bold text-white mb-1">10k+</div>
               <div className="text-sm text-gray-400">Happy Developers</div>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-to-r from-indigo-500/20 to-primary/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <TrendingUp className="w-6 h-6 text-indigo-400" />
+              <div className="w-12 h-12 bg-gradient-to-r from-accent/20 to-primary/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <TrendingUp className="w-6 h-6 text-primary-light" />
               </div>
               <div className="text-2xl font-bold text-white mb-1">99%</div>
               <div className="text-sm text-gray-400">Satisfaction Rate</div>
@@ -132,8 +132,8 @@ export default function LandingPage(): JSX.Element {
           <div className="absolute left-8 top-16 transform hover:translate-x-6 hover:scale-105 hover:rotate-1 transition-all duration-700 z-30 w-[350px] group"
                style={{ transformStyle: 'preserve-3d', animation: 'floatAndTilt 8s ease-in-out infinite' }}>
             <div className="relative cursor-pointer perspective-1000" style={{ transform: 'rotateY(-15deg) rotateX(8deg)', transformStyle: 'preserve-3d' }}>
-              <div className="absolute -inset-3 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 rounded-3xl blur-2xl opacity-40 group-hover:opacity-80 group-hover:animate-pulse transition-all duration-700"></div>
-              <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-8 shadow-2xl relative backdrop-blur-xl border border-gray-700/50 group-hover:border-primary/50 transition-all duration-500">
+              <div className="absolute -inset-3 bg-gradient-to-r from-primary via-secondary to-accent rounded-3xl blur-2xl opacity-40 group-hover:opacity-80 group-hover:animate-pulse transition-all duration-700"></div>
+              <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-8 shadow-2xl relative backdrop-blur-xl border border-gray-700/50 group-hover:border-secondary/50 transition-all duration-500">
                 {/* Glass effect overlay */}
                 <div className="absolute inset-0 bg-white/5 rounded-2xl backdrop-blur-sm"></div>
                 
@@ -146,7 +146,7 @@ export default function LandingPage(): JSX.Element {
                       </div>
                     </div>
                     <div>
-                      <div className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400">
+                      <div className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-secondary to-accent">
                         awesome-project
                       </div>
                       <div className="text-xs text-gray-400">Repository README</div>
@@ -155,8 +155,8 @@ export default function LandingPage(): JSX.Element {
 
                   {/* Content */}
                   <div className="space-y-4">
-                    <div className="text-purple-300 font-mono text-sm font-bold flex items-center typing-effect">
-                      <span className="text-blue-400 mr-2">#</span> 
+                    <div className="text-accent font-mono text-sm font-bold flex items-center typing-effect">
+                      <span className="text-secondary mr-2">#</span> 
                       <span className="typing-text">AI-Generated README.md</span>
                       <span className="cursor-blink">|</span>
                     </div>
@@ -172,15 +172,15 @@ export default function LandingPage(): JSX.Element {
                       </div>
                       <div className="space-y-1">
                         <div className="flex items-center space-x-2 animate-slideIn" style={{ animationDelay: '0s' }}>
-                          <div className="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>
+                          <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
                           <span className="text-xs text-gray-300">feat: Added AI README generator</span>
                         </div>
                         <div className="flex items-center space-x-2 animate-slideIn" style={{ animationDelay: '1s' }}>
-                          <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                          <div className="w-1.5 h-1.5 bg-accent rounded-full"></div>
                           <span className="text-xs text-gray-300">docs: Updated documentation</span>
                         </div>
                         <div className="flex items-center space-x-2 animate-slideIn" style={{ animationDelay: '2s' }}>
-                          <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                          <div className="w-1.5 h-1.5 bg-primary-light rounded-full"></div>
                           <span className="text-xs text-gray-300">fix: Improved performance</span>
                         </div>
                       </div>
@@ -189,17 +189,17 @@ export default function LandingPage(): JSX.Element {
                     {/* Enhanced Stats with Progress Bars */}
                     <div className="grid grid-cols-3 gap-2">
                       <div className="bg-gradient-to-br from-primary/20 to-transparent rounded-lg p-2 text-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent shimmer"></div>
-                        <Star className="w-4 h-4 text-yellow-400 mx-auto mb-1 animate-spin-slow" />
-                        <div className="text-lg font-bold text-purple-300 counter" data-target="2500">0</div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-secondary/10 to-transparent shimmer"></div>
+                        <Star className="w-4 h-4 text-accent mx-auto mb-1 animate-spin-slow" />
+                        <div className="text-lg font-bold text-accent counter" data-target="2500">0</div>
                         <div className="text-xs text-gray-400">Stars</div>
                         <div className="w-full bg-gray-700 rounded-full h-1 mt-1">
-                          <div className="bg-gradient-to-r from-primary to-yellow-400 h-1 rounded-full animate-progressBar" style={{ width: '0%', animationDelay: '0.5s' }}></div>
+                          <div className="bg-gradient-to-r from-secondary to-accent h-1 rounded-full animate-progressBar" style={{ width: '0%', animationDelay: '0.5s' }}></div>
                         </div>
                       </div>
                       <div className="bg-gradient-to-br from-secondary/20 to-transparent rounded-lg p-2 text-center relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent shimmer" style={{ animationDelay: '1s' }}></div>
-                        <GitFork className="w-4 h-4 text-blue-400 mx-auto mb-1 animate-bounce" />
+                        <GitFork className="w-4 h-4 text-accent mx-auto mb-1 animate-bounce" />
                         <div className="text-lg font-bold text-blue-300 counter" data-target="180">0</div>
                         <div className="text-xs text-gray-400">Forks</div>
                         <div className="w-full bg-gray-700 rounded-full h-1 mt-1">
@@ -317,7 +317,7 @@ export default function LandingPage(): JSX.Element {
                     </div>
                   </div>
                   <div>
-                    <div className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                    <div className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary to-accent">
                       Alex Johnson
                     </div>
                     <div className="text-sm text-gray-400">Full Stack Developer</div>
@@ -369,19 +369,19 @@ export default function LandingPage(): JSX.Element {
                 <div className="grid grid-cols-3 gap-2 mb-4">
                   <div className="bg-purple-500/20 rounded-lg p-2 text-center relative overflow-hidden group">
                     <div className="relative z-10">
-                      <Coffee className="w-4 h-4 text-purple-400 mx-auto mb-1 animate-bounce" style={{ animationDuration: '2s' }} />
+                      <Coffee className="w-4 h-4 text-secondary mx-auto mb-1 animate-bounce" style={{ animationDuration: '2s' }} />
                       <div className="text-sm font-bold text-white animate-counter">1,247</div>
                       <div className="text-xs text-gray-400">Commits</div>
-                      <div className="text-xs text-purple-400 mt-1">+5 today</div>
+                      <div className="text-xs text-secondary mt-1">+5 today</div>
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
                   </div>
                   <div className="bg-blue-500/20 rounded-lg p-2 text-center relative overflow-hidden group">
                     <div className="relative z-10">
-                      <Layers className="w-4 h-4 text-blue-400 mx-auto mb-1 animate-spin" style={{ animationDuration: '4s' }} />
+                      <Layers className="w-4 h-4 text-accent mx-auto mb-1 animate-spin" style={{ animationDuration: '4s' }} />
                       <div className="text-sm font-bold text-white animate-counter">28</div>
                       <div className="text-xs text-gray-400">Projects</div>
-                      <div className="text-xs text-blue-400 mt-1">+2 this week</div>
+                      <div className="text-xs text-accent mt-1">+2 this week</div>
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" style={{ animationDelay: '1s' }}></div>
                   </div>
@@ -406,7 +406,7 @@ export default function LandingPage(): JSX.Element {
                     <div>
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-gray-300">React/TypeScript</span>
-                        <span className="text-purple-400">92%</span>
+                        <span className="text-secondary">92%</span>
                       </div>
                       <div className="w-full bg-gray-700 rounded-full h-2">
                         <div 
@@ -422,11 +422,11 @@ export default function LandingPage(): JSX.Element {
                     <div>
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-gray-300">Node.js/APIs</span>
-                        <span className="text-blue-400">87%</span>
+                        <span className="text-accent">87%</span>
                       </div>
                       <div className="w-full bg-gray-700 rounded-full h-2">
                         <div 
-                          className="bg-gradient-to-r from-blue-600 to-blue-400 h-2 rounded-full animate-progressBar" 
+                          className="bg-gradient-to-r from-blue-600 to-accent h-2 rounded-full animate-progressBar" 
                           style={{ 
                             width: '0%', 
                             animationDelay: '1s',
