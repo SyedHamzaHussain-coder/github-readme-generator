@@ -290,8 +290,8 @@ export const EnhancedReadmeBuilder: React.FC<EnhancedReadmeBuilderProps> = ({
             <div className="flex items-center gap-4">
               <h1 className="text-2xl font-bold text-gray-900">Enhanced README Builder</h1>
               {isAnalyzing && (
-                <div className="flex items-center gap-2 text-blue-600">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                <div className="flex items-center gap-2 text-secondary">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-secondary"></div>
                   <span className="text-sm">Analyzing repository...</span>
                 </div>
               )}
@@ -301,7 +301,7 @@ export const EnhancedReadmeBuilder: React.FC<EnhancedReadmeBuilderProps> = ({
               <button
                 onClick={generateAIEnhancedReadme}
                 disabled={isGenerating || !repositoryAnalysis}
-                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <Brain size={20} />
                 {isGenerating ? 'Enhancing...' : 'AI Enhance'}
@@ -309,7 +309,7 @@ export const EnhancedReadmeBuilder: React.FC<EnhancedReadmeBuilderProps> = ({
               
               <button
                 onClick={downloadReadme}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition-colors"
               >
                 <Download size={20} />
                 Download
@@ -317,7 +317,7 @@ export const EnhancedReadmeBuilder: React.FC<EnhancedReadmeBuilderProps> = ({
               
               <button
                 onClick={shareReadme}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary-dark transition-colors"
               >
                 <Share2 size={20} />
                 Share
@@ -338,7 +338,7 @@ export const EnhancedReadmeBuilder: React.FC<EnhancedReadmeBuilderProps> = ({
                 onClick={() => setCurrentView(key as any)}
                 className={`flex items-center gap-2 px-4 py-3 border-b-2 font-medium text-sm transition-colors ${
                   currentView === key
-                    ? 'border-blue-500 text-blue-600'
+                    ? 'border-secondary text-secondary'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
@@ -422,7 +422,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
               onClick={() => setSelectedCategory(category.key)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 selectedCategory === category.key
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-secondary text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -434,9 +434,9 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 
       {/* AI Suggestions */}
       {repositoryAnalysis && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="text-lg font-semibold text-blue-900 mb-2">AI Recommendations</h4>
-          <p className="text-blue-800 text-sm">
+        <div className="bg-accent-light border border-accent rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-primary mb-2">AI Recommendations</h4>
+          <p className="text-primary-dark text-sm">
             Based on your repository analysis, we recommend the <strong>React Application</strong> template.
           </p>
         </div>
@@ -449,7 +449,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             key={template.id}
             className={`bg-white rounded-lg shadow-sm border-2 p-6 cursor-pointer transition-all hover:shadow-md ${
               selectedTemplate?.id === template.id
-                ? 'border-blue-500 bg-blue-50'
+                ? 'border-secondary bg-accent-light'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
             onClick={() => onTemplateSelect(template)}
@@ -516,7 +516,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ repositoryAnaly
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Complexity Score</h4>
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="text-2xl font-bold text-secondary">
                 {repositoryAnalysis.complexity.overall}/10
               </div>
               <p className="text-sm text-gray-600">
@@ -536,7 +536,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ repositoryAnaly
             </div>
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Technologies</h4>
-              <div className="text-2xl font-bold text-purple-600">
+              <div className="text-2xl font-bold text-primary">
                 {repositoryAnalysis.techStack.frontend.languages.length + 
                  repositoryAnalysis.techStack.backend.languages.length}
               </div>
@@ -607,9 +607,9 @@ interface MetricCardProps {
 
 const MetricCard: React.FC<MetricCardProps> = ({ title, value, subtitle, color }) => {
   const colorClasses = {
-    blue: 'text-blue-600 bg-blue-50 border-blue-200',
+    blue: 'text-secondary bg-accent-light border-accent',
     green: 'text-green-600 bg-green-50 border-green-200',
-    purple: 'text-purple-600 bg-purple-50 border-purple-200',
+    purple: 'text-primary bg-purple-50 border-purple-200',
     red: 'text-red-600 bg-red-50 border-red-200'
   };
 
@@ -625,3 +625,4 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, subtitle, color }
 };
 
 export default EnhancedReadmeBuilder;
+

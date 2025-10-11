@@ -27,7 +27,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   return (
     <div className="max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
           Your {readmeType === 'repository' ? 'Repository' : 'Profile'} README is Ready!
         </h2>
         <div className="flex items-center space-x-4">
@@ -41,14 +41,14 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
             </button>
             <button
               onClick={onDownload}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all duration-200 flex items-center"
+              className="bg-accent text-white px-4 py-2 rounded-lg hover:bg-accent-dark transition-all duration-200 flex items-center"
             >
               <Download className="w-4 h-4 mr-2" />
               Download
             </button>
             <button
               onClick={onUpload}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200 flex items-center"
+              className="bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200 flex items-center"
             >
               <Upload className="w-4 h-4 mr-2" />
               Upload to GitHub

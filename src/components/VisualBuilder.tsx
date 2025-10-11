@@ -195,14 +195,14 @@ export const VisualBuilder: React.FC<VisualBuilderProps> = ({
           <div className="flex gap-3">
             <button
               onClick={() => setShowSectionLibrary(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary-dark transition-colors"
             >
               <Plus size={20} />
               Add Section
             </button>
             <button
               onClick={handlePreview}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition-colors"
             >
               {previewMode ? <Code size={20} /> : <Eye size={20} />}
               {previewMode ? 'Edit' : 'Preview'}
@@ -238,7 +238,7 @@ export const VisualBuilder: React.FC<VisualBuilderProps> = ({
                             {...provided.draggableProps}
                             className={`bg-white rounded-lg shadow-sm border-2 transition-all ${
                               snapshot.isDragging
-                                ? 'border-blue-400 shadow-lg'
+                                ? 'border-secondary shadow-lg'
                                 : 'border-gray-200'
                             }`}
                           >
@@ -309,13 +309,13 @@ export const VisualBuilder: React.FC<VisualBuilderProps> = ({
           <div className="bg-white rounded-lg shadow-sm p-4">
             <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
             <div className="space-y-2">
-              <button className="w-full p-2 text-sm bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors">
+              <button className="w-full p-2 text-sm bg-accent-light text-secondary-dark rounded-lg hover:bg-blue-100 transition-colors">
                 🤖 AI Enhance
               </button>
-              <button className="w-full p-2 text-sm bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors">
+              <button className="w-full p-2 text-sm bg-accent-light text-accent-dark rounded-lg hover:bg-green-100 transition-colors">
                 📊 Add Analytics
               </button>
-              <button className="w-full p-2 text-sm bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors">
+              <button className="w-full p-2 text-sm bg-primary-light text-primary-dark rounded-lg hover:bg-purple-100 transition-colors">
                 🎨 Style Guide
               </button>
             </div>
@@ -382,7 +382,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({
             <input
               value={localTitle}
               onChange={(e) => setLocalTitle(e.target.value)}
-              className="text-lg font-semibold bg-transparent border-b border-blue-300 focus:outline-none focus:border-blue-500"
+              className="text-lg font-semibold bg-transparent border-b border-secondary-light focus:outline-none focus:border-secondary"
             />
           ) : (
             <h3 className="text-lg font-semibold">{section.title}</h3>
@@ -392,14 +392,14 @@ const SectionEditor: React.FC<SectionEditorProps> = ({
           {isEditing ? (
             <button
               onClick={handleSave}
-              className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+              className="p-2 text-accent hover:bg-accent-light rounded-lg transition-colors"
             >
               <Save size={16} />
             </button>
           ) : (
             <button
               onClick={onEdit}
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              className="p-2 text-secondary hover:bg-accent-light rounded-lg transition-colors"
             >
               <Edit3 size={16} />
             </button>
@@ -461,7 +461,7 @@ const SectionLibraryModal: React.FC<SectionLibraryModalProps> = ({
             <button
               key={type}
               onClick={() => onAddSection(type as SectionType)}
-              className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all text-left"
+              className="p-4 border border-gray-200 rounded-lg hover:border-secondary-light hover:bg-accent-light transition-all text-left"
             >
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-2xl">{template.icon}</span>
@@ -479,3 +479,5 @@ const SectionLibraryModal: React.FC<SectionLibraryModalProps> = ({
 };
 
 export default VisualBuilder;
+
+

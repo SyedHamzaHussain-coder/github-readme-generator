@@ -209,7 +209,7 @@ const App = () => {
                     setReadmeType('repository');
                     navigate('/template');
                   }}
-                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
                 >
                   Repository README
                 </button>
@@ -218,7 +218,7 @@ const App = () => {
                     setReadmeType('profile');
                     navigate('/template');
                   }}
-                  className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
+                  className="px-6 py-3 bg-secondary text-white rounded-lg hover:bg-secondary-dark transition-colors"
                 >
                   Profile README
                 </button>
@@ -236,7 +236,7 @@ const App = () => {
                     setReadmeType('repository');
                     navigate('/enhanced');
                   }}
-                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                  className="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:from-primary-dark hover:to-secondary-dark transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                   🎨 Try Enhanced Builder
                 </button>
@@ -250,7 +250,7 @@ const App = () => {
             <div className="text-center p-8">
               <h2 className="text-2xl font-bold mb-4">Loading GitHub Data...</h2>
               <p className="text-gray-600">Please wait while we load your GitHub profile information.</p>
-              <div className="animate-spin rounded-full h-8 w-8 border-4 border-purple-600 border-t-transparent mx-auto mt-4"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-4 border-secondary border-t-transparent mx-auto mt-4"></div>
             </div>
           );
         }
@@ -362,9 +362,9 @@ const App = () => {
         return (
           <div className="text-center max-w-2xl mx-auto">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
               <div className="relative bg-white rounded-3xl shadow-2xl p-12 border border-gray-100">
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-600 border-t-transparent mx-auto mb-6"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-4 border-secondary border-t-transparent mx-auto mb-6"></div>
                 <h2 className="text-3xl font-bold text-gray-800 mb-4">
                   Generating Your {readmeType === 'repository' ? 'Repository' : 'Profile'} README
                 </h2>
@@ -415,7 +415,7 @@ const App = () => {
             <div className="text-center p-8">
               <h2 className="text-2xl font-bold mb-4">Loading GitHub Data...</h2>
               <p className="text-gray-600">Please wait while we load your GitHub profile information.</p>
-              <div className="animate-spin rounded-full h-8 w-8 border-4 border-purple-600 border-t-transparent mx-auto mt-4"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-4 border-secondary border-t-transparent mx-auto mt-4"></div>
             </div>
           );
         }
@@ -435,14 +435,14 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-accent-light via-accent to-secondary-light">
       {step !== 'landing' && step !== 'examples' && (
         /* Header - Hidden on landing page and examples page */
         <header className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="bg-gradient-to-r from-purple-500 to-blue-500 p-2 rounded-lg">
+                <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
@@ -458,7 +458,7 @@ const App = () => {
                     <div key={s} className="flex items-center">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                         step === s
-                          ? 'bg-purple-600 text-white'
+                          ? 'bg-secondary text-white'
                           : ['connect', 'type', 'template', 'generate', 'preview'].indexOf(step) > index
                           ? 'bg-green-500 text-white'
                           : 'bg-gray-200 text-gray-600'
@@ -545,3 +545,4 @@ const App = () => {
 };
 
 export default App;
+

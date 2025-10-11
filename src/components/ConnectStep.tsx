@@ -276,9 +276,9 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     return (
       <div className="text-center max-w-2xl mx-auto">
         <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full blur-3xl opacity-20 animate-pulse"></div>
           <div className="relative bg-white rounded-3xl shadow-2xl p-12 border border-gray-100">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-600 border-t-transparent mx-auto mb-6"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary border-t-transparent mx-auto mb-6"></div>
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
               Checking Authentication Status
             </h2>
@@ -295,8 +295,8 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     return (
       <div className="text-center max-w-2xl mx-auto">
         <div className="relative mb-12">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-blue-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-          <div className="relative bg-gradient-to-r from-green-600 to-blue-600 text-white p-8 rounded-3xl shadow-2xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-secondary rounded-full blur-3xl opacity-20 animate-pulse"></div>
+          <div className="relative bg-gradient-to-r from-green-600 to-secondary text-white p-8 rounded-3xl shadow-2xl">
             <div className="flex items-center justify-center mb-4">
               <img 
                 src={userInfo.avatar_url} 
@@ -313,7 +313,7 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
               <button
                 onClick={() => connectToGitHub(false)}
                 disabled={isGenerating}
-                className="bg-white text-green-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg transform hover:scale-105 disabled:opacity-50"
+                className="bg-white text-accent-dark px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg transform hover:scale-105 disabled:opacity-50"
               >
                 {isGenerating ? (
                   <div className="flex items-center space-x-2">
@@ -344,8 +344,8 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
   return (
     <div className="text-center max-w-2xl mx-auto">
       <div className="relative mb-12">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-        <div className="relative bg-gradient-to-r from-purple-600 to-blue-600 text-white p-8 rounded-3xl shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full blur-3xl opacity-20 animate-pulse"></div>
+        <div className="relative bg-gradient-to-r from-primary to-secondary text-white p-8 rounded-3xl shadow-2xl">
           <Github className="w-16 h-16 mx-auto mb-6" />
           <h2 className="text-3xl font-bold mb-4">Connect Your GitHub Account</h2>
           <p className="text-purple-100 mb-8">
@@ -375,11 +375,11 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
             <button
               onClick={() => connectToGitHub(true)}
               disabled={isGenerating}
-              className="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg transform hover:scale-105 disabled:opacity-50 text-lg"
+              className="bg-white text-primary px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg transform hover:scale-105 disabled:opacity-50 text-lg"
             >
               {isGenerating ? (
                 <div className="flex items-center space-x-2">
-                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-purple-600 border-t-transparent"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary border-t-transparent"></div>
                   <span>Connecting...</span>
                 </div>
               ) : (
@@ -408,3 +408,4 @@ export const ConnectStep: React.FC<ConnectStepProps> = ({ isGenerating, connectT
     </div>
   );
 };
+
