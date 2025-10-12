@@ -25,35 +25,33 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
 }) => {
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+    <div className="max-w-7xl mx-auto px-2 sm:px-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4 sm:gap-0">
+        <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2 sm:mb-0">
           Your {readmeType === 'repository' ? 'Repository' : 'Profile'} README is Ready!
         </h2>
-        <div className="flex items-center space-x-4">
-          <div className="flex space-x-2">
-            <button
-              onClick={onCopy}
-              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-all duration-200 flex items-center"
-            >
-              <Copy className="w-4 h-4 mr-2" />
-              Copy
-            </button>
-            <button
-              onClick={onDownload}
-              className="bg-accent text-white px-4 py-2 rounded-lg hover:bg-accent-dark transition-all duration-200 flex items-center"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Download
-            </button>
-            <button
-              onClick={onUpload}
-              className="bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200 flex items-center"
-            >
-              <Upload className="w-4 h-4 mr-2" />
-              Upload to GitHub
-            </button>
-          </div>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
+          <button
+            onClick={onCopy}
+            className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-all duration-200 flex items-center justify-center text-sm"
+          >
+            <Copy className="w-4 h-4 mr-2" />
+            Copy
+          </button>
+          <button
+            onClick={onDownload}
+            className="bg-accent text-white px-4 py-2 rounded-lg hover:bg-accent-dark transition-all duration-200 flex items-center justify-center text-sm"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Download
+          </button>
+          <button
+            onClick={onUpload}
+            className="bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200 flex items-center justify-center text-sm"
+          >
+            <Upload className="w-4 h-4 mr-2" />
+            Upload to GitHub
+          </button>
         </div>
       </div>
 

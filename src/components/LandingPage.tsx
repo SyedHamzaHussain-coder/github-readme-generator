@@ -34,7 +34,7 @@ export default function LandingPage(): JSX.Element {
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-10 flex justify-between items-center px-6 py-3 max-w-7xl mx-auto">
+  <nav className="relative z-10 flex justify-between items-center px-4 sm:px-6 py-3 max-w-7xl mx-auto">
         <div className="flex items-center space-x-3">
           <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl shadow-2xl">
             <Sparkles className="w-8 h-8" />
@@ -46,28 +46,28 @@ export default function LandingPage(): JSX.Element {
         </div>
       </nav>
 
-      {/* Main Content Layout */}
-      <div className="relative z-10 grid grid-cols-2 gap-16 max-w-8xl mx-auto px-8 min-h-[calc(100vh-80px)] py-8">
+  {/* Main Content Layout */}
+  <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 max-w-8xl mx-auto px-4 sm:px-8 min-h-[calc(100vh-80px)] py-8">
         {/* Left Side - Text Content */}
-        <div className="flex flex-col justify-start pt-16 space-y-6 pr-8">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+  <div className="flex flex-col justify-start pt-8 md:pt-16 space-y-4 md:space-y-6 md:pr-8">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
           <div className="inline-flex items-center bg-secondary/20 rounded-full px-4 py-2 w-fit backdrop-blur-sm border border-primary/30">
             <Zap className="w-4 h-4 mr-2 text-accent" />
             <span className="text-sm font-medium">AI-Powered • Lightning Fast • Professional</span>
           </div>
             
-          <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
             Generate
             <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent"> Professional</span>
             <br />
             READMEs with AI
           </h1>
           
-          <p className="text-xl text-gray-300 leading-relaxed max-w-lg">
+          <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed max-w-lg">
             Transform your GitHub repositories and profile with AI-generated documentation. 
             Create stunning, professional READMEs in seconds, not hours.
           </p>
             
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button
               onClick={() => navigate('/connect')}
               className="bg-gradient-to-r from-primary to-secondary hover:from-primary-dark hover:to-secondary-dark px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center justify-center group"
@@ -86,7 +86,7 @@ export default function LandingPage(): JSX.Element {
           </div>
 
           {/* Feature highlights */}
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-3 sm:gap-6 mt-4">
             <div className="text-center">
               <div className="w-12 h-12 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl flex items-center justify-center mx-auto mb-3">
                 <Code className="w-6 h-6 text-secondary" />
@@ -112,7 +112,7 @@ export default function LandingPage(): JSX.Element {
         </div>
 
         {/* Right Side - 3D Cards */}
-        <div className="relative flex items-start justify-center pl-8 overflow-visible min-h-[800px]">
+  <div className="relative flex items-start justify-center md:pl-8 overflow-visible min-h-[500px] md:min-h-[800px] mt-8 md:mt-0">
           {/* Floating particles effect */}
           <div className="absolute inset-0 overflow-hidden">
             {Array.from({ length: 20 }).map((_, i) => (
@@ -129,7 +129,7 @@ export default function LandingPage(): JSX.Element {
           </div>
 
           {/* Repository README Preview Card */}
-          <div className="absolute left-8 top-16 transform hover:translate-x-6 hover:scale-105 hover:rotate-1 transition-all duration-700 z-30 w-[350px] group"
+          <div className="absolute left-1/2 md:left-8 top-8 md:top-16 transform -translate-x-1/2 md:translate-x-0 hover:translate-x-6 hover:scale-105 hover:rotate-1 transition-all duration-700 z-30 w-[90vw] max-w-xs sm:max-w-sm md:w-[350px] group"
                style={{ transformStyle: 'preserve-3d', animation: 'floatAndTilt 8s ease-in-out infinite' }}>
             <div className="relative cursor-pointer perspective-1000" style={{ transform: 'rotateY(-15deg) rotateX(8deg)', transformStyle: 'preserve-3d' }}>
               <div className="absolute -inset-3 bg-gradient-to-r from-primary via-secondary to-accent rounded-3xl blur-2xl opacity-40 group-hover:opacity-80 group-hover:animate-pulse transition-all duration-700"></div>
@@ -299,7 +299,7 @@ export default function LandingPage(): JSX.Element {
           </div>
 
           {/* Profile README Preview Card */}
-          <div className="absolute right-8 top-16 transform hover:-translate-x-6 hover:scale-105 hover:-rotate-1 transition-all duration-700 z-30 w-[350px] group"
+          <div className="absolute left-1/2 md:right-8 top-80 md:top-16 transform -translate-x-1/2 md:translate-x-0 hover:-translate-x-6 hover:scale-105 hover:-rotate-1 transition-all duration-700 z-30 w-[90vw] max-w-xs sm:max-w-sm md:w-[350px] group"
                style={{ transformStyle: 'preserve-3d', animation: 'floatAndTilt 8s ease-in-out infinite reverse' }}>
             <div className="relative cursor-pointer perspective-1000" style={{ transform: 'rotateY(15deg) rotateX(8deg)', transformStyle: 'preserve-3d' }}>
               <div className="absolute -inset-3 bg-gradient-to-r from-secondary via-accent to-primary rounded-3xl blur-2xl opacity-40 group-hover:opacity-80 group-hover:animate-pulse transition-all duration-700"></div>
@@ -479,12 +479,12 @@ export default function LandingPage(): JSX.Element {
           </div>
 
           {/* Connecting line */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-1 bg-gradient-to-r from-primary/40 via-secondary/60 to-primary/40 blur-sm"></div>
+          <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-1 bg-gradient-to-r from-primary/40 via-secondary/60 to-primary/40 blur-sm"></div>
         </div>
       </div>
 
       {/* Bottom padding for scroll space */}
-      <div className="h-32"></div>
+  <div className="h-16 md:h-32"></div>
 
       <style>{`
         @keyframes floatAndTilt {

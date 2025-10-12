@@ -485,7 +485,7 @@ const App = () => {
       {step !== 'landing' && step !== 'examples' && (
         /* Header - Hidden on landing page and examples page */
         <header className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg">
@@ -493,16 +493,16 @@ const App = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <h1 className="text-xl font-bold">README.ai</h1>
+                <h1 className="text-lg sm:text-xl font-bold">README.ai</h1>
               </div>
-              
+
               {/* Progress Steps and User Info */}
-              <div className="flex items-center space-x-6">
-                {/* Progress Steps */}
-                <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 sm:space-x-6">
+                {/* Progress Steps - Hidden on small screens */}
+                <div className="hidden sm:flex items-center space-x-2 lg:space-x-4">
                   {['connect', 'type', 'template', 'generate', 'preview'].map((s, index) => (
                     <div key={s} className="flex items-center">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      <div className={`w-6 h-6 lg:w-8 lg:h-8 rounded-full flex items-center justify-center text-xs lg:text-sm ${
                         step === s
                           ? 'bg-secondary text-white'
                           : ['connect', 'type', 'template', 'generate', 'preview'].indexOf(step) > index
@@ -512,7 +512,7 @@ const App = () => {
                         {index + 1}
                       </div>
                       {index < 4 && (
-                        <div className={`w-8 h-0.5 ${
+                        <div className={`w-4 lg:w-8 h-0.5 ${
                           ['connect', 'type', 'template', 'generate', 'preview'].indexOf(step) > index
                             ? 'bg-accent'
                             : 'bg-gray-200'
@@ -524,30 +524,32 @@ const App = () => {
 
                 {/* User Info and Logout */}
                 {githubData && (
-                  <div className="flex items-center space-x-3 pl-4 border-l border-gray-200">
-                    <img 
-                      src={githubData.avatar_url} 
-                      alt="Avatar" 
-                      className="w-8 h-8 rounded-full"
+                  <div className="flex items-center space-x-2 sm:space-x-3 pl-2 sm:pl-4 border-l border-gray-200">
+                    <img
+                      src={githubData.avatar_url}
+                      alt="Avatar"
+                      className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                     />
-                    <span className="text-sm text-gray-700">@{githubData.username}</span>
+                    <div className="hidden sm:block">
+                      <span className="text-xs sm:text-sm text-gray-700">@{githubData.username}</span>
+                    </div>
                     <button
                       onClick={async () => {
                         // Clear all GitHub-related data
                         // Get current token for proper logout
                         const token = localStorage.getItem('github_token');
-                        
+
                         // Clear localStorage first
                         localStorage.removeItem('github_token');
                         localStorage.removeItem('github_user');
                         localStorage.removeItem('github_auth_timestamp');
                         localStorage.removeItem('github_auth_success');
                         localStorage.removeItem('github_oauth_state');
-                        
+
                         // Also clear sessionStorage
                         sessionStorage.removeItem('github_user');
                         sessionStorage.removeItem('github_token');
-                        
+
                         // Call server-side logout with token
                         try {
                           await fetch('/api/auth/logout', {
@@ -564,15 +566,16 @@ const App = () => {
                         } catch (error) {
                           console.warn('Server logout failed:', error);
                         }
-                        
+
                         // Clear state and redirect to connect page with logout parameter
                         setGithubData(null);
                         setRepos([]);
                         window.location.href = '/connect?logout=true';
                       }}
-                      className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                      className="px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
                     >
-                      Logout
+                      <span className="hidden sm:inline">Logout</span>
+                      <span className="sm:hidden">×</span>
                     </button>
                   </div>
                 )}
