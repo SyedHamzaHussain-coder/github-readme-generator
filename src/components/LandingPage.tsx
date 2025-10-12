@@ -112,7 +112,7 @@ export default function LandingPage(): JSX.Element {
         </div>
 
         {/* Right Side - 3D Cards */}
-  <div className="relative flex items-start justify-center md:pl-8 overflow-visible min-h-[500px] md:min-h-[800px] mt-8 md:mt-0">
+        <div className="relative flex items-start justify-center md:pl-8 overflow-visible min-h-[600px] sm:min-h-[700px] md:min-h-[800px] mt-8 md:mt-0">
           {/* Floating particles effect */}
           <div className="absolute inset-0 overflow-hidden">
             {Array.from({ length: 20 }).map((_, i) => (
@@ -129,11 +129,11 @@ export default function LandingPage(): JSX.Element {
           </div>
 
           {/* Repository README Preview Card */}
-          <div className="absolute left-1/2 md:left-8 top-8 md:top-16 transform -translate-x-1/2 md:translate-x-0 hover:translate-x-6 hover:scale-105 hover:rotate-1 transition-all duration-700 z-30 w-[90vw] max-w-xs sm:max-w-sm md:w-[350px] group"
+          <div className="absolute left-1/2 md:left-8 top-8 md:top-16 transform -translate-x-1/2 md:translate-x-0 hover:translate-x-6 hover:scale-105 hover:rotate-1 transition-all duration-700 z-30 w-[85vw] max-w-[280px] sm:max-w-sm md:w-[350px] group"
                style={{ transformStyle: 'preserve-3d', animation: 'floatAndTilt 8s ease-in-out infinite' }}>
             <div className="relative cursor-pointer perspective-1000" style={{ transform: 'rotateY(-15deg) rotateX(8deg)', transformStyle: 'preserve-3d' }}>
               <div className="absolute -inset-3 bg-gradient-to-r from-primary via-secondary to-accent rounded-3xl blur-2xl opacity-40 group-hover:opacity-80 group-hover:animate-pulse transition-all duration-700"></div>
-              <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-8 shadow-2xl relative backdrop-blur-xl border border-gray-700/50 group-hover:border-secondary/50 transition-all duration-500">
+              <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl relative backdrop-blur-xl border border-gray-700/50 group-hover:border-secondary/50 transition-all duration-500">
                 {/* Glass effect overlay */}
                 <div className="absolute inset-0 bg-white/5 rounded-2xl backdrop-blur-sm"></div>
                 
@@ -299,11 +299,11 @@ export default function LandingPage(): JSX.Element {
           </div>
 
           {/* Profile README Preview Card */}
-          <div className="absolute left-1/2 md:right-8 top-80 md:top-16 transform -translate-x-1/2 md:translate-x-0 hover:-translate-x-6 hover:scale-105 hover:-rotate-1 transition-all duration-700 z-30 w-[90vw] max-w-xs sm:max-w-sm md:w-[350px] group"
+          <div className="absolute left-1/2 md:right-8 top-96 md:top-16 transform -translate-x-1/2 md:translate-x-0 hover:-translate-x-6 hover:scale-105 hover:-rotate-1 transition-all duration-700 z-30 w-[85vw] max-w-[280px] sm:max-w-sm md:w-[350px] group"
                style={{ transformStyle: 'preserve-3d', animation: 'floatAndTilt 8s ease-in-out infinite reverse' }}>
             <div className="relative cursor-pointer perspective-1000" style={{ transform: 'rotateY(15deg) rotateX(8deg)', transformStyle: 'preserve-3d' }}>
               <div className="absolute -inset-3 bg-gradient-to-r from-secondary via-accent to-primary rounded-3xl blur-2xl opacity-40 group-hover:opacity-80 group-hover:animate-pulse transition-all duration-700"></div>
-              <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-8 shadow-2xl relative border border-gray-700/50 group-hover:border-secondary/50 transition-all duration-500">
+              <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl relative border border-gray-700/50 group-hover:border-secondary/50 transition-all duration-500">
                 {/* Animated Profile Section */}
                 <div className="flex items-center space-x-4 mb-6">
                   <div className="relative">
@@ -484,9 +484,7 @@ export default function LandingPage(): JSX.Element {
       </div>
 
       {/* Bottom padding for scroll space */}
-  <div className="h-16 md:h-32"></div>
-
-      <style>{`
+      <div className="h-24 sm:h-32 md:h-32"></div>      <style>{`
         @keyframes floatAndTilt {
           0%, 100% { 
             transform: translateY(0px) rotateZ(0deg) rotateY(0deg); 
