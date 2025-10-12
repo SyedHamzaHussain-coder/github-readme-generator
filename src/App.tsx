@@ -7,6 +7,7 @@ import { PreviewStep } from './components/PreviewStep';
 import { EnhancedReadmeBuilder } from './components/EnhancedReadmeBuilder';
 import { GitHubData, Repository, ReadmeType, StepType } from './types';
 import { repositoryTemplates, profileTemplates } from './constants/templates';
+import { generateProfileReadme, generateRepositoryReadme } from './utils/readmeGenerator';
 
 const App = () => {
   const location = useLocation();
@@ -345,13 +346,58 @@ const App = () => {
                   errorMessage += 'Using template preview instead.';
                 }
                 
-                // Fallback to template preview
-                const template = (readmeType === 'repository' ? repositoryTemplates : profileTemplates)
-                  .find(t => t.id === selectedTemplate);
-                setGeneratedReadme(template?.preview || '');
-                setEditedReadme(template?.preview || '');
-                navigate('/preview');
-                alert(errorMessage);
+                // Fallback to local generation using actual GitHub data
+                console.log('🔄 API failed, generating README locally with real GitHub data...');
+                
+                try {
+                  let fallbackReadme = '';
+                  
+                  if (readmeType === 'profile' && githubData) {
+                    fallbackReadme = generateProfileReadme(githubData, selectedTemplate);
+                    console.log('✅ Generated profile README locally');
+                  } else if (readmeType === 'repository' && selectedRepo && githubData) {
+                    const repoData = {
+                      repository: {
+                        name: selectedRepo,
+                        full_name: `${githubData.username}/${selectedRepo}`,
+                        description: '',
+                        html_url: `https://github.com/${githubData.username}/${selectedRepo}`,
+                        language: 'JavaScript'
+                      }
+                    };
+                    fallbackReadme = generateRepositoryReadme(repoData, selectedTemplate);
+                    console.log('✅ Generated repository README locally');
+                  } else {
+                    // Last resort: use template preview
+                    const template = (readmeType === 'repository' ? repositoryTemplates : profileTemplates)
+                      .find(t => t.id === selectedTemplate);
+                    fallbackReadme = template?.preview || '';
+                    console.log('📄 Using template preview as last resort');
+                  }
+                  
+                  setGeneratedReadme(fallbackReadme);
+                  setEditedReadme(fallbackReadme);
+                  
+                  // Show success message for local generation
+                  const template = (readmeType === 'repository' ? repositoryTemplates : profileTemplates)
+                    .find(t => t.id === selectedTemplate);
+                  if (fallbackReadme && fallbackReadme !== template?.preview) {
+                    alert('✅ README generated successfully using your GitHub data! (API unavailable)');
+                  }
+                  
+                  navigate('/preview');
+                  
+                } catch (localError) {
+                  console.error('❌ Local generation failed:', localError);
+                  
+                  // Final fallback to template
+                  const template = (readmeType === 'repository' ? repositoryTemplates : profileTemplates)
+                    .find(t => t.id === selectedTemplate);
+                  setGeneratedReadme(template?.preview || '');
+                  setEditedReadme(template?.preview || '');
+                  navigate('/preview');
+                  alert('⚠️ Using template preview. Please check your connection and try again.');
+                }
               } finally {
                 setIsGenerating(false);
               }
