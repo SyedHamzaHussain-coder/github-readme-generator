@@ -1,13 +1,23 @@
 import React, { useState, useCallback } from 'react';
-import { 
-  DragDropContext, 
-  Droppable, 
-  Draggable, 
-  DropResult,
-  DroppableProvided,
-  DraggableProvided,
-  DraggableStateSnapshot
-} from 'react-beautiful-dnd';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import {
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { Plus, GripVertical, Edit3, Trash2, Eye, Code, Save } from 'lucide-react';
 import { LivePreview } from './LivePreview';
 
@@ -124,22 +134,31 @@ export const VisualBuilder: React.FC<VisualBuilderProps> = ({
   const [previewMode, setPreviewMode] = useState(false);
   const [showSectionLibrary, setShowSectionLibrary] = useState(false);
 
-  const handleDragEnd = useCallback((result: DropResult) => {
-    if (!result.destination) return;
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
-    const newSections = Array.from(sections);
-    const [reorderedSection] = newSections.splice(result.source.index, 1);
-    newSections.splice(result.destination.index, 0, reorderedSection);
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
 
-    // Update order
-    const updatedSections = newSections.map((section, index) => ({
-      ...section,
-      order: index
-    }));
+    if (over && active.id !== over.id) {
+      setSections((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
 
-    setSections(updatedSections);
-    onSectionsChange(updatedSections);
-  }, [sections, onSectionsChange]);
+        const newSections = arrayMove(items, oldIndex, newIndex).map((section, index) => ({
+          ...section,
+          order: index
+        }));
+
+        onSectionsChange(newSections);
+        return newSections;
+      });
+    }
+  }, [onSectionsChange]);
 
   const addSection = useCallback((type: SectionType) => {
     const template = SECTION_TEMPLATES[type];
@@ -218,48 +237,27 @@ export const VisualBuilder: React.FC<VisualBuilderProps> = ({
           {previewMode ? (
             <LivePreview markdown={generateMarkdown()} />
           ) : (
-            <DragDropContext onDragEnd={handleDragEnd}>
-              <Droppable droppableId="sections">
-                {(provided: DroppableProvided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className="space-y-4"
-                  >
-                    {sections.map((section, index) => (
-                      <Draggable
-                        key={section.id}
-                        draggableId={section.id}
-                        index={index}
-                      >
-                        {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            className={`bg-white rounded-lg shadow-sm border-2 transition-all ${
-                              snapshot.isDragging
-                                ? 'border-secondary shadow-lg'
-                                : 'border-gray-200'
-                            }`}
-                          >
-                            <SectionEditor
-                              section={section}
-                              isEditing={editingSection === section.id}
-                              onEdit={() => setEditingSection(section.id)}
-                              onSave={() => setEditingSection(null)}
-                              onUpdate={(updates) => updateSection(section.id, updates)}
-                              onDelete={() => deleteSection(section.id)}
-                              dragHandleProps={provided.dragHandleProps}
-                            />
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext items={sections.map(s => s.id)} strategy={verticalListSortingStrategy}>
+                <div className="space-y-4">
+                  {sections.map((section) => (
+                    <SortableSection
+                      key={section.id}
+                      section={section}
+                      isEditing={editingSection === section.id}
+                      onEdit={() => setEditingSection(section.id)}
+                      onSave={() => setEditingSection(null)}
+                      onUpdate={(updates) => updateSection(section.id, updates)}
+                      onDelete={() => deleteSection(section.id)}
+                    />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
           )}
         </div>
 
@@ -330,6 +328,60 @@ export const VisualBuilder: React.FC<VisualBuilderProps> = ({
           onClose={() => setShowSectionLibrary(false)}
         />
       )}
+    </div>
+  );
+};
+
+interface SortableSectionProps {
+  section: ReadmeSection;
+  isEditing: boolean;
+  onEdit: () => void;
+  onSave: () => void;
+  onUpdate: (updates: Partial<ReadmeSection>) => void;
+  onDelete: () => void;
+}
+
+const SortableSection: React.FC<SortableSectionProps> = ({
+  section,
+  isEditing,
+  onEdit,
+  onSave,
+  onUpdate,
+  onDelete
+}) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: section.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`bg-white rounded-lg shadow-sm border-2 transition-all ${
+        isDragging
+          ? 'border-secondary shadow-lg'
+          : 'border-gray-200'
+      }`}
+    >
+      <SectionEditor
+        section={section}
+        isEditing={isEditing}
+        onEdit={onEdit}
+        onSave={onSave}
+        onUpdate={onUpdate}
+        onDelete={onDelete}
+        dragHandleProps={{ ...attributes, ...listeners }}
+      />
     </div>
   );
 };
