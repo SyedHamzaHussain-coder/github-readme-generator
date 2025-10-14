@@ -456,18 +456,9 @@ const App = () => {
           />
         );
       case 'enhanced':
-        if (!githubData) {
-          return (
-            <div className="text-center p-8">
-              <h2 className="text-2xl font-bold mb-4">Loading GitHub Data...</h2>
-              <p className="text-gray-600">Please wait while we load your GitHub profile information.</p>
-              <div className="animate-spin rounded-full h-8 w-8 border-4 border-secondary border-t-transparent mx-auto mt-4"></div>
-            </div>
-          );
-        }
         return (
           <EnhancedReadmeBuilder
-            repositoryUrl={selectedRepo ? `https://github.com/${githubData.username}/${selectedRepo}` : undefined}
+            repositoryUrl={selectedRepo && githubData ? `https://github.com/${githubData.username}/${selectedRepo}` : undefined}
             githubToken={localStorage.getItem('github_token') || undefined}
             onReadmeGenerated={(markdown) => {
               setGeneratedReadme(markdown);

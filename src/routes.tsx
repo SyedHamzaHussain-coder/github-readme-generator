@@ -5,6 +5,9 @@ import ExamplesPage from './components/ExamplesPage';
 import GitHubCallback from './components/GitHubCallback';
 import { DebugPage } from './components/DebugPage';
 
+// Component that renders nothing - App.tsx handles the routing
+const AppHandledRoute = () => null;
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -24,7 +27,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/connect",
-        element: null,  // Will be rendered by App.tsx with proper props
+        element: <AppHandledRoute />,  // App.tsx handles this route
       },
       {
         path: "/auth/callback",
@@ -32,19 +35,23 @@ export const router = createBrowserRouter([
       },
       {
         path: "/type",
-        element: null,  // Will be rendered by App.tsx with proper props
+        element: <AppHandledRoute />,  // App.tsx handles this route
       },
       {
         path: "/template",
-        element: null,  // Will be rendered by App.tsx with proper props
+        element: <AppHandledRoute />,  // App.tsx handles this route
       },
       {
         path: "/preview",
-        element: null,  // Will be rendered by App.tsx with proper props
+        element: <AppHandledRoute />,  // App.tsx handles this route
       },
       {
         path: "/generate",
-        element: null,  // Will be rendered by App.tsx with proper props
+        element: <AppHandledRoute />,  // App.tsx handles this route
+      },
+      {
+        path: "/enhanced",
+        element: <AppHandledRoute />,  // App.tsx handles this route
       },
     ],
   },
